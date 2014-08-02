@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eitan.petsi.com.eitan.petsi.services.RegFailedException;
 import com.eitan.petsi.com.eitan.petsi.services.RegisterCallBack;
@@ -45,7 +47,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
+            "foo@example.com:hello", "b@e.com:world"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -270,7 +272,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                return new RegResponse(false,"");
+                return new RegResponse(false,getString(R.string.error_occurred));
             }
 
             for (String credential : DUMMY_CREDENTIALS) {
@@ -284,7 +286,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             try {
                 new RegisterNewUser(mEmail,mPassword).RegisterUser();
             } catch (RegFailedException e) {
-                return new RegResponse(false,"");
+                return new RegResponse(false,e.getMessage());
             }
             return new RegResponse(true,"");
         }
@@ -295,7 +297,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             showProgress(false);
 
             if (response.isSuccess()) {
+
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 finish();
+
             } else {
                 mPasswordView.setError(response.getMessage());
                 mPasswordView.requestFocus();
