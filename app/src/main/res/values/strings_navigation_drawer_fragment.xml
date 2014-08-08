@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="actions">
+        <item>Search</item>
+        <item>Favorites</item>
+    </string-array>
+
+    <array name="images">
+        <item>@drawable/ic_action_search</item>
+        <item>@drawable/ic_action_favorite</item>
+    </array>
+</resources>

@@ -12,6 +12,7 @@ public class PetDetails {
     private String otherInfo;
     private String description;
     private String photoUrl;
+    private String size;
 
     public String getName() {
         return name;
@@ -68,4 +69,8 @@ public class PetDetails {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+    public String getSize() { return size; }
+
+    public void setSize(String size) { this.size = size; }
 }

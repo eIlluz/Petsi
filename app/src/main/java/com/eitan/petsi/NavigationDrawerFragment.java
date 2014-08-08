@@ -4,6 +4,7 @@ package com.eitan.petsi;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.res.TypedArray;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -97,7 +98,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -105,8 +106,24 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
-                }));
+                }));*/
+
+        String[] actions = getResources().getStringArray(R.array.actions);
+
+        TypedArray tArray = getResources().obtainTypedArray(R.array.images);
+        int[] imageIDs = new int[tArray.length()];
+        for (int i = 0; i < tArray.length(); i++)
+        {
+            imageIDs[i] = tArray.getResourceId(i,0);
+        }
+        tArray.recycle();
+
+        mDrawerListView.setAdapter(new navDrawerAdapter(getActivity().getBaseContext(),
+                            actions,
+                           imageIDs));
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 
