@@ -6,27 +6,22 @@
     android:padding="6dip" >
 
     <ImageView
-        android:id="@+id/petimage"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="6dip"
-        android:contentDescription="TODO"
-        android:src="@drawable/ic_launcher" />
+        android:id="@+id/nav_action_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="9dp"
+        android:layout_alignParentTop="true"/>
 
     <TextView
-        android:id="@+id/petname"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/petimage"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="10dip"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="Description"
-        android:textSize="18sp" />
+        android:layout_alignBottom="@+id/nav_action_icon"
+        android:layout_width="97dp"
+        android:layout_height="32dp"
+        android:id="@+id/nav_action_text"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="66dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"/>
 
 
 </RelativeLayout>

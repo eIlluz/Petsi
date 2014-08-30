@@ -191,7 +191,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 toSearchRes.putExtra("Size",mSizeSpinner.getSelectedItem().toString());
                 toSearchRes.putExtra("Gender",mGenderSpinner.getSelectedItem().toString());
                 toSearchRes.putExtra("Animal",mAnimalSpinner.getSelectedItem().toString());
-
                 //Go to results activity.
                 startActivity(toSearchRes);
         }

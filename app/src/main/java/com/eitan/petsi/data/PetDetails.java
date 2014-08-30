@@ -14,6 +14,17 @@ public class PetDetails {
     private String photoUrl;
     private String size;
 
+    public PetDetails(String name, String gender, int age, String type, String otherInfo, String description, String photoUrl, String size) {
+        this.name = name;
+        Gender = gender;
+        this.age = age;
+        this.type = type;
+        this.otherInfo = otherInfo;
+        this.description = description;
+        this.photoUrl = photoUrl;
+        this.size = size;
+    }
+
     public String getName() {
         return name;
     }

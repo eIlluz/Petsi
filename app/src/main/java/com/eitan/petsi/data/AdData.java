@@ -1,5 +1,6 @@
 package com.eitan.petsi.data;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -10,9 +11,17 @@ public class AdData {
 
     private String adID;
     private String userName;
-    private Date lastUpdate;
-    private Date createdOn;
+    private Calendar lastUpdate;
+    private Calendar createdOn;
     private String adStatus;
+
+    public AdData(String adID, String userName, Calendar lastUpdate, Calendar createdOn, String adStatus) {
+        this.adID = adID;
+        this.userName = userName;
+        this.lastUpdate = lastUpdate;
+        this.createdOn = createdOn;
+        this.adStatus = adStatus;
+    }
 
     public String getAdID() {
         return adID;
@@ -30,19 +39,17 @@ public class AdData {
         this.userName = userName;
     }
 
-    public Date getLastUpdate() {
+    public Calendar getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Date lastUpdate) {
+    public void setLastUpdate(Calendar lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
-    public Date getCreatedOn() {
-        return createdOn;
-    }
+    public Calendar getCreatedOn() {return createdOn; }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(Calendar createdOn) {
         this.createdOn = createdOn;
     }
 

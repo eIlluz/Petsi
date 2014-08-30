@@ -32,4 +32,10 @@ public class Pet {
     public void setPetDetails(PetDetails petDetails) {
         this.petDetails = petDetails;
     }
+
+    public Pet(AdData adData, OwnerDetails ownerDetails, PetDetails petDetails) {
+        this.adData = adData;
+        this.ownerDetails = ownerDetails;
+        this.petDetails = petDetails;
+    }
 }

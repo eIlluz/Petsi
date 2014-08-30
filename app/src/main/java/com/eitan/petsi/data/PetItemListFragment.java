@@ -1,6 +1,7 @@
 package com.eitan.petsi.data;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import com.eitan.petsi.R;
 
+import com.eitan.petsi.com.eitan.petsi.services.GetPetsByFilter;
+import com.eitan.petsi.com.eitan.petsi.services.GetPetsRespond;
 import com.eitan.petsi.data.dummy.DummyContent;
 
 /**
@@ -39,6 +42,11 @@ public class PetItemListFragment extends ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    private String mAge;
+    private String mGender;
+    private String mSize;
+    private String mAnimal;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -79,6 +87,18 @@ public class PetItemListFragment extends ListFragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 DummyContent.ITEMS));
+//        setListAdapter(new ArrayAdapter<Pet>(getActivity(),android.R.layout.simple_list_item_activated_1,));
+        //setListAdapter(new petListAdapter(getActivity(),));
+    }
+
+    public void setFilters(String age,String animal,String size,String gender){
+
+        mAge = age;
+        mAnimal = animal;
+        mSize = size;
+        mGender = gender;
+
+
     }
 
     @Override
@@ -152,4 +172,33 @@ public class PetItemListFragment extends ListFragment {
 
         mActivatedPosition = position;
     }
+
+    private class GetPetsTask extends AsyncTask<Void,Void,GetPetsRespond>{
+
+        private String mAge;
+        private String mGender;
+        private String mSize;
+        private String mAnimal;
+
+        private GetPetsTask(String mAge, String mGender, String mSize, String mAnimal) {
+            this.mAge = mAge;
+            this.mGender = mGender;
+            this.mSize = mSize;
+            this.mAnimal = mAnimal;
+        }
+
+        @Override
+        protected GetPetsRespond doInBackground(Void... voids) {
+
+            new GetPetsByFilter(mAnimal,mAge,mSize,mGender).GetPets();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(GetPetsRespond getPetsRespond) {
+            super.onPostExecute(getPetsRespond);
+        }
+    }
+
+
 }

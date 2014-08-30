@@ -11,7 +11,8 @@ import android.widget.TextView;
 
 import com.eitan.petsi.R;
 
-import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * Created by eitan on 23/08/2014.
@@ -20,10 +21,10 @@ public class petListAdapter extends ArrayAdapter<Pet>
 {
 
     Context mContext;
-    List<Pet> mPetList;
+    ArrayList<Pet> mPetList;
 
 
-    public petListAdapter(Context context, List<Pet> objects) {
+    public petListAdapter(Context context, ArrayList<Pet> objects) {
         super(context, R.layout.pet_item, objects);
         mContext = context;
         mPetList = objects;

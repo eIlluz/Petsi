@@ -10,6 +10,13 @@ public class OwnerDetails {
     private String address;
     private String email;
 
+    public OwnerDetails(String name, String tel, String address, String email) {
+        this.name = name;
+        this.tel = tel;
+        this.address = address;
+        this.email = email;
+    }
+
     public String getTel() {
         return tel;
     }
