@@ -12,8 +12,11 @@ import android.widget.Toast;
 import com.eitan.petsi.R;
 
 import com.eitan.petsi.com.eitan.petsi.services.GetPetsByFilter;
+import com.eitan.petsi.com.eitan.petsi.services.GetPetsException;
 import com.eitan.petsi.com.eitan.petsi.services.GetPetsRespond;
 import com.eitan.petsi.data.dummy.DummyContent;
+
+import java.util.ArrayList;
 
 /**
  * A list fragment representing a list of Pet Items. This fragment
@@ -82,13 +85,13 @@ public class PetItemListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+//        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+//                getActivity(),
+//                android.R.layout.simple_list_item_activated_1,
+//                android.R.id.text1,
+//                DummyContent.ITEMS));
 //        setListAdapter(new ArrayAdapter<Pet>(getActivity(),android.R.layout.simple_list_item_activated_1,));
-        //setListAdapter(new petListAdapter(getActivity(),));
+
     }
 
     public void setFilters(String age,String animal,String size,String gender){
@@ -190,13 +193,26 @@ public class PetItemListFragment extends ListFragment {
         @Override
         protected GetPetsRespond doInBackground(Void... voids) {
 
-            new GetPetsByFilter(mAnimal,mAge,mSize,mGender).GetPets();
-            return null;
+            ArrayList<Pet> mPetsList;
+
+            try {
+                mPetsList = new GetPetsByFilter(mAnimal,mAge,mSize,mGender).GetPets();
+            } catch (GetPetsException e) {
+                e.printStackTrace();
+                return new GetPetsRespond(false,e.getMessage(),null);
+            }
+            return new GetPetsRespond(true,null,mPetsList);
         }
 
         @Override
         protected void onPostExecute(GetPetsRespond getPetsRespond) {
-            super.onPostExecute(getPetsRespond);
+
+            if (getPetsRespond.isSuccess()) {
+                setListAdapter(new petListAdapter(getActivity(), getPetsRespond.getPetlist()));
+            }
+            else {
+                Toast.makeText(getActivity().getApplicationContext(),getPetsRespond.getMessage(),Toast.LENGTH_LONG);
+            }
         }
     }
 

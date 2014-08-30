@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.widget.Toast;
 
 
+import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 
 /**
@@ -47,9 +48,13 @@ public class PetItemListActivity extends Activity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((PetItemListFragment) getFragmentManager()
-                    .findFragmentById(R.id.petitem_list))
-                    .setActivateOnItemClick(true);
+            PetItemListFragment petListFrag = ((PetItemListFragment) getFragmentManager()
+                    .findFragmentById(R.id.petitem_list));
+            petListFrag.setActivateOnItemClick(true);
+
+            Bundle extras = getIntent().getExtras();
+            petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
+
         }
 
         // TODO: If exposing deep links into your app, handle intents here.

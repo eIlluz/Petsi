@@ -8,6 +8,11 @@ import android.content.Context;
  */
 public class App extends Application {
 
+    public static final String AGE = "Age";
+    public static final String SIZE = "Size";
+    public static final String ANIMAL = "Animal";
+    public static final String GENDER = "Gender";
+
     private static Context mContext;
 
     @Override
