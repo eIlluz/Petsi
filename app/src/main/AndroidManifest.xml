@@ -21,6 +21,18 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name=".data.PetItemListActivity"
+            android:label="@string/title_petitem_list" >
+        </activity>
+        <activity
+            android:name=".data.PetItemDetailActivity"
+            android:label="@string/title_petitem_detail"
+            android:parentActivityName=".data.PetItemListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eitan.petsi.data.PetItemListActivity" />
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

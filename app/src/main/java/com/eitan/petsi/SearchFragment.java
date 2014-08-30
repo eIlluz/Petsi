@@ -1,6 +1,7 @@
 package com.eitan.petsi;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,7 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.eitan.petsi.data.PetItemListActivity;
 
 
 /**
@@ -20,7 +25,7 @@ import android.widget.Spinner;
  * create an instance of this fragment.
  *
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -72,6 +77,9 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View frag = inflater.inflate(R.layout.fragment_search, container, false);
+
+        Button btSearch = (Button)frag.findViewById(R.id.search_button);
+        btSearch.setOnClickListener(this);
 
         setAnimalAdapter(frag);
         setGenderAdapter(frag);
@@ -167,6 +175,27 @@ public class SearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId())
+        {
+
+            case R.id.search_button:
+                Intent toSearchRes = new Intent(this.getActivity(), PetItemListActivity.class);
+
+                //Fill the intent with the filter data.
+                toSearchRes.putExtra("Age",mAgeSpinner.getSelectedItem().toString());
+                toSearchRes.putExtra("Size",mSizeSpinner.getSelectedItem().toString());
+                toSearchRes.putExtra("Gender",mGenderSpinner.getSelectedItem().toString());
+                toSearchRes.putExtra("Animal",mAnimalSpinner.getSelectedItem().toString());
+
+                //Go to results activity.
+                startActivity(toSearchRes);
+        }
+
     }
 
     /**
