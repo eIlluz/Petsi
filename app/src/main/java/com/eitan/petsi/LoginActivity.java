@@ -91,6 +91,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        mEmailView.setText("b@e.com");
+        mPasswordView.setText("world");
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
     }
 
     private void populateAutoComplete() {

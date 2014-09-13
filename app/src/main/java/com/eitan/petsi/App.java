@@ -3,6 +3,8 @@ package com.eitan.petsi;
 import android.app.Application;
 import android.content.Context;
 
+import com.eitan.petsi.data.PetListProvider;
+
 /**
  * Created by eitan on 26/07/2014.
  */
@@ -12,6 +14,8 @@ public class App extends Application {
     public static final String SIZE = "Size";
     public static final String ANIMAL = "Animal";
     public static final String GENDER = "Gender";
+
+    public PetListProvider petListProvider = new PetListProvider();
 
     private static Context mContext;
 

@@ -1,6 +1,7 @@
 package com.eitan.petsi.data;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.widget.Toast;
@@ -8,6 +9,11 @@ import android.widget.Toast;
 
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
+import com.eitan.petsi.com.eitan.petsi.services.GetPetsByFilter;
+import com.eitan.petsi.com.eitan.petsi.services.GetPetsException;
+import com.eitan.petsi.com.eitan.petsi.services.GetPetsRespond;
+
+import java.util.ArrayList;
 
 /**
  * An activity representing a list of Pet Items. This activity
@@ -34,10 +40,16 @@ public class PetItemListActivity extends Activity
      */
     private boolean mTwoPane;
 
+    private ArrayList<Pet> mPetList;
+    private PetItemListFragment mPetListFrag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_petitem_list);
+
+        mPetListFrag = ((PetItemListFragment) getFragmentManager()
+                .findFragmentById(R.id.petitem_list));
 
         if (findViewById(R.id.petitem_detail_container) != null) {
             // The detail container view will be present only in the
@@ -46,17 +58,20 @@ public class PetItemListActivity extends Activity
             // activity should be in two-pane mode.
             mTwoPane = true;
 
+
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            PetItemListFragment petListFrag = ((PetItemListFragment) getFragmentManager()
-                    .findFragmentById(R.id.petitem_list));
-            petListFrag.setActivateOnItemClick(true);
-
-            Bundle extras = getIntent().getExtras();
-            petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
+            mPetListFrag.setActivateOnItemClick(true);
 
         }
 
+        Bundle extras = getIntent().getExtras();
+
+        GetPetsTask taskPetList = new GetPetsTask(extras.getString(App.AGE),extras.getString(App.GENDER),extras.getString(App.SIZE),extras.getString(App.ANIMAL));
+        taskPetList.execute((Void) null);
+
+
+        //petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
@@ -87,6 +102,50 @@ public class PetItemListActivity extends Activity
             Intent detailIntent = new Intent(this, PetItemDetailActivity.class);
             detailIntent.putExtra(PetItemDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
+        }
+    }
+
+
+    private class GetPetsTask extends AsyncTask<Void,Void,GetPetsRespond> {
+
+        private String mAge;
+        private String mGender;
+        private String mSize;
+        private String mAnimal;
+
+        private GetPetsTask(String mAge, String mGender, String mSize, String mAnimal) {
+            this.mAge = mAge;
+            this.mGender = mGender;
+            this.mSize = mSize;
+            this.mAnimal = mAnimal;
+        }
+
+        @Override
+        protected GetPetsRespond doInBackground(Void... voids) {
+
+            ArrayList<Pet> mPetsList;
+
+            try {
+                mPetsList = new GetPetsByFilter(mAnimal, mAge, mSize, mGender).GetPets();
+            } catch (GetPetsException e) {
+                e.printStackTrace();
+                return new GetPetsRespond(false, e.getMessage(), null);
+            }
+            return new GetPetsRespond(true, null, mPetsList);
+        }
+
+        @Override
+        protected void onPostExecute(GetPetsRespond getPetsRespond) {
+
+            if (getPetsRespond.isSuccess()) {
+
+                mPetList = getPetsRespond.getPetlist();
+                App app = (App)getApplication();
+                app.petListProvider.setPetList(mPetList);
+                mPetListFrag.showList();
+            } else {
+                Toast.makeText(getApplicationContext(), getPetsRespond.getMessage(), Toast.LENGTH_LONG);
+            }
         }
     }
 }

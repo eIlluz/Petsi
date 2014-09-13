@@ -12,7 +12,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
         android:contentDescription="TODO"
-        android:src="@drawable/ic_launcher" />
+        android:focusable="false"
+        android:src="@drawable/ic_launcher"
+        />
 
     <TextView
         android:id="@+id/petname"
@@ -25,6 +27,7 @@
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Description"
+        android:focusable="false"
         android:textSize="18sp" />
 
 

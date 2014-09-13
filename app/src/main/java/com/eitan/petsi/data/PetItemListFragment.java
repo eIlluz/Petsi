@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 
 import com.eitan.petsi.com.eitan.petsi.services.GetPetsByFilter;
@@ -51,6 +52,10 @@ public class PetItemListFragment extends ListFragment {
     private String mSize;
     private String mAnimal;
 
+
+    private PetListProvider mPetProvider;
+    private ArrayList<Pet> mPetList;
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -61,6 +66,7 @@ public class PetItemListFragment extends ListFragment {
          * Callback for when an item has been selected.
          */
         public void onItemSelected(String id);
+
     }
 
     /**
@@ -90,18 +96,16 @@ public class PetItemListFragment extends ListFragment {
 //                android.R.layout.simple_list_item_activated_1,
 //                android.R.id.text1,
 //                DummyContent.ITEMS));
-//        setListAdapter(new ArrayAdapter<Pet>(getActivity(),android.R.layout.simple_list_item_activated_1,));
+        //setListAdapter(new ArrayAdapter<Pet>(getActivity(),android.R.layout.simple_list_item_activated_1,));
 
     }
 
-    public void setFilters(String age,String animal,String size,String gender){
+    public void showList(){
 
-        mAge = age;
-        mAnimal = animal;
-        mSize = size;
-        mGender = gender;
-
-
+        App application = (App)getActivity().getApplication();
+        mPetProvider = application.petListProvider;
+        setListAdapter(new petListAdapter(getActivity(), mPetProvider.getPetArray()));
+        mPetList = mPetProvider.getPetArray();
     }
 
     @Override
@@ -137,13 +141,15 @@ public class PetItemListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
+
         super.onListItemClick(listView, view, position, id);
 
-        Toast.makeText(this.getActivity().getApplicationContext(),"Fragment pressed",Toast.LENGTH_LONG);
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(mPetList.get(position).getAdData().getAdID());
+
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -159,6 +165,7 @@ public class PetItemListFragment extends ListFragment {
      * given the 'activated' state when touched.
      */
     public void setActivateOnItemClick(boolean activateOnItemClick) {
+
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
         getListView().setChoiceMode(activateOnItemClick
@@ -167,6 +174,8 @@ public class PetItemListFragment extends ListFragment {
     }
 
     private void setActivatedPosition(int position) {
+
+
         if (position == ListView.INVALID_POSITION) {
             getListView().setItemChecked(mActivatedPosition, false);
         } else {
@@ -175,46 +184,5 @@ public class PetItemListFragment extends ListFragment {
 
         mActivatedPosition = position;
     }
-
-    private class GetPetsTask extends AsyncTask<Void,Void,GetPetsRespond>{
-
-        private String mAge;
-        private String mGender;
-        private String mSize;
-        private String mAnimal;
-
-        private GetPetsTask(String mAge, String mGender, String mSize, String mAnimal) {
-            this.mAge = mAge;
-            this.mGender = mGender;
-            this.mSize = mSize;
-            this.mAnimal = mAnimal;
-        }
-
-        @Override
-        protected GetPetsRespond doInBackground(Void... voids) {
-
-            ArrayList<Pet> mPetsList;
-
-            try {
-                mPetsList = new GetPetsByFilter(mAnimal,mAge,mSize,mGender).GetPets();
-            } catch (GetPetsException e) {
-                e.printStackTrace();
-                return new GetPetsRespond(false,e.getMessage(),null);
-            }
-            return new GetPetsRespond(true,null,mPetsList);
-        }
-
-        @Override
-        protected void onPostExecute(GetPetsRespond getPetsRespond) {
-
-            if (getPetsRespond.isSuccess()) {
-                setListAdapter(new petListAdapter(getActivity(), getPetsRespond.getPetlist()));
-            }
-            else {
-                Toast.makeText(getActivity().getApplicationContext(),getPetsRespond.getMessage(),Toast.LENGTH_LONG);
-            }
-        }
-    }
-
 
 }
