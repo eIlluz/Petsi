@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/petimage"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_width="@dimen/pet_item_width"
+        android:layout_height="@dimen/pet_item_height"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"

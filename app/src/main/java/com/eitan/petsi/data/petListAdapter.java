@@ -44,13 +44,15 @@ public class petListAdapter extends ArrayAdapter<Pet>
             holder = new ViewHolder();
             holder.petName = (TextView)convertView.findViewById(R.id.petname);
             holder.petImage = (ImageView)convertView.findViewById(R.id.petimage);
+            convertView.setTag(holder);
         } else
         {
             holder = (ViewHolder)convertView.getTag();
         }
 
         holder.petName.setText(mPetList.get(position).getPetDetails().getName());
-        Picasso.with(mContext).load("http://i.imgur.com/nZlaeSH.jpg")
+        Picasso.with(mContext).load(mPetList.get(position).getPetDetails().getPhotoUrl())
+                .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
                .placeholder(R.drawable.ic_dog)
                .error(R.drawable.ic_launcher)
                .into(holder.petImage);
