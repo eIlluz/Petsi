@@ -43,6 +43,7 @@ public class petListAdapter extends ArrayAdapter<Pet>
             convertView = mInflate.inflate(R.layout.pet_item,null,true);
             holder = new ViewHolder();
             holder.petName = (TextView)convertView.findViewById(R.id.petname);
+            holder.petOtherInfo = (TextView)convertView.findViewById(R.id.petDetails);
             holder.petImage = (ImageView)convertView.findViewById(R.id.petimage);
             convertView.setTag(holder);
         } else
@@ -51,6 +52,9 @@ public class petListAdapter extends ArrayAdapter<Pet>
         }
 
         holder.petName.setText(mPetList.get(position).getPetDetails().getName());
+        holder.petOtherInfo.setText(mPetList.get(position).getPetDetails().getGender() + ", " +
+                mPetList.get(position).getPetDetails().getAge() + ", " +
+                mPetList.get(position).getPetDetails().getSize());
         Picasso.with(mContext).load(mPetList.get(position).getPetDetails().getPhotoUrl())
                 .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
                .placeholder(R.drawable.ic_dog)
@@ -63,6 +67,7 @@ public class petListAdapter extends ArrayAdapter<Pet>
     private static class ViewHolder {
         public TextView petName;
         public ImageView petImage;
+        public TextView petOtherInfo;
 
     }
 

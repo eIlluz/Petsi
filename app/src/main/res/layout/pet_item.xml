@@ -22,13 +22,23 @@
         android:layout_height="26dip"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/petimage"
-        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="10dip"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Description"
         android:focusable="false"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
-
+    <TextView
+        android:id="@+id/petDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/petimage"
+        android:layout_below="@id/petname"
+        android:layout_marginLeft="10dip"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:focusable="false"
+        android:textSize="16sp" />
 </RelativeLayout>
