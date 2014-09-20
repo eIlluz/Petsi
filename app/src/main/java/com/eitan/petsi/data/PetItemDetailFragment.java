@@ -2,15 +2,19 @@ package com.eitan.petsi.data;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 
 import com.eitan.petsi.data.dummy.DummyContent;
+import com.google.android.gms.plus.model.people.Person;
+import com.squareup.picasso.Picasso;
 
 /**
  * A fragment representing a single PetItem detail screen.
@@ -26,7 +30,9 @@ public class PetItemDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
 
-    private Pet mPet;
+    private Pet pet;
+    private TextView petDesc;
+    private ImageView petImage;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,7 +51,7 @@ public class PetItemDetailFragment extends Fragment {
             // to load content from a content provider.
 
             App app = (App)getActivity().getApplication();
-            mPet = app.petListProvider.getPetByAdID(getArguments().getString(ARG_ITEM_ID));
+            pet = app.petListProvider.getPetByAdID(getArguments().getString(ARG_ITEM_ID));
         }
     }
 
@@ -54,9 +60,26 @@ public class PetItemDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_petitem_detail, container, false);
 
+        petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
+        petImage = (ImageView) rootView.findViewById(R.id.det_petimage);
+
+
         // Show the dummy content as text in a TextView.
-        if (mPet != null) {
-            ((TextView) rootView.findViewById(R.id.petitem_detail)).setText(mPet.getPetDetails().getName());
+        if (pet != null) {
+            petDesc.setText(pet.getPetDetails().getDescription());
+
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int width = displaymetrics.widthPixels;
+            int height = displaymetrics.heightPixels;
+
+            Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
+                    .resize(width,(height / 3))
+                    .placeholder(R.drawable.ic_dog)
+                    .error(R.drawable.ic_launcher)
+                    .into(petImage);
+
+
         }
 
         return rootView;
