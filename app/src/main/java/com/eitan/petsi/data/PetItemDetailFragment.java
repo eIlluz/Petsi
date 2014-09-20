@@ -60,23 +60,25 @@ public class PetItemDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_petitem_detail, container, false);
 
-        petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
+//        petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
         petImage = (ImageView) rootView.findViewById(R.id.det_petimage);
 
 
         // Show the dummy content as text in a TextView.
         if (pet != null) {
-            petDesc.setText(pet.getPetDetails().getDescription());
+//            petDesc.setText(pet.getPetDetails().getDescription());
 
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             int width = displaymetrics.widthPixels;
             int height = displaymetrics.heightPixels;
 
+
             Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
-                    .resize(width,(height / 3))
+//                    .resize(petImage.getWidth(),petImage.getHeight())
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)
+                    .fit().centerCrop()
                     .into(petImage);
 
 

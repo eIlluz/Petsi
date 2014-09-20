@@ -5,7 +5,9 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
     <ImageView
-        android:id="@+id/name"
+        android:id="@+id/det_petimage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"/>
+
 </RelativeLayout>
