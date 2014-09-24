@@ -62,14 +62,14 @@ public class PetItemDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_petitem_detail, container, false);
 
         petName = (TextView) rootView.findViewById(R.id.det_petName);
-        petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
+        //petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
         petImage = (ImageView) rootView.findViewById(R.id.det_petimage);
 
 
         // Show the dummy content as text in a TextView.
         if (pet != null) {
 
-            petDesc.setText(pet.getPetDetails().getDescription());
+            //petDesc.setText(pet.getPetDetails().getDescription());
             petName.setText(pet.getPetDetails().getName());
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
