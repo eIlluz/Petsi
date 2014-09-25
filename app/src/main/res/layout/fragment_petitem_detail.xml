@@ -6,17 +6,27 @@
     android:paddingTop="0dp"
     android:orientation="vertical"
     android:weightSum="3">
-    <ImageView
-        android:id="@+id/det_petimage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:scaleType="matrix"
-        android:layout_weight="1"/>
+
     <LinearLayout
+        android:id="@+id/det_cont_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/det_petimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="matrix"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/det_cont_gen_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        android:layout_gravity="top"
         android:paddingLeft="10dp">
 
         <TextView
@@ -24,6 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
+            android:text="My name"
+            android:layout_gravity="top"
             android:textSize="25sp"/>
 
     </LinearLayout>

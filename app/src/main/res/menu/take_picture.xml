@@ -1,10 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.eitan.petsi.MainActivity" >
-    <item android:id="@+id/action_new_ad"
-        android:icon="@drawable/ic_action_new"
-        android:title=""
-        android:showAsAction="withText|ifRoom" />
+    tools:context="com.eitan.petsi.TakePicture" >
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

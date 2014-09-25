@@ -1,5 +1,6 @@
 package com.eitan.petsi.data;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.DisplayMetrics;
@@ -7,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
@@ -15,6 +18,9 @@ import com.eitan.petsi.R;
 import com.eitan.petsi.data.dummy.DummyContent;
 import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+
+import java.io.IOException;
 
 /**
  * A fragment representing a single PetItem detail screen.
@@ -65,23 +71,22 @@ public class PetItemDetailFragment extends Fragment {
         //petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
         petImage = (ImageView) rootView.findViewById(R.id.det_petimage);
 
-
         // Show the dummy content as text in a TextView.
         if (pet != null) {
 
             //petDesc.setText(pet.getPetDetails().getDescription());
             petName.setText(pet.getPetDetails().getName());
-            DisplayMetrics displaymetrics = new DisplayMetrics();
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int width = displaymetrics.widthPixels;
-            int height = displaymetrics.heightPixels;
+//            DisplayMetrics displaymetrics = new DisplayMetrics();
+//            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//            int width = displaymetrics.widthPixels;
+//            int height = displaymetrics.heightPixels;
 
+            petImage.setBackgroundColor(Color.BLUE);
 
             Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
-//                    .resize(petImage.getWidth(),petImage.getHeight())
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)
-                    .fit().centerCrop()
+                    .centerCrop().fit()
                     .into(petImage);
 
 
