@@ -43,6 +43,8 @@ public class PetItemListActivity extends Activity
     private ArrayList<Pet> mPetList;
     private PetItemListFragment mPetListFrag;
 
+    private FilterData filterData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,7 @@ public class PetItemListActivity extends Activity
                 .findFragmentById(R.id.petitem_list));
 
         if (findViewById(R.id.petitem_detail_container) != null) {
+
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
             // res/values-sw600dp). If this view is present, then the
@@ -65,11 +68,32 @@ public class PetItemListActivity extends Activity
 
         }
 
-        Bundle extras = getIntent().getExtras();
+        if (filterData == null) {
+            if (savedInstanceState == null) {
+                Bundle extras = getIntent().getExtras();
 
-        GetPetsTask taskPetList = new GetPetsTask(extras.getString(App.AGE),extras.getString(App.GENDER),extras.getString(App.SIZE),extras.getString(App.ANIMAL));
+                if (extras != null) {
+                    filterData = new FilterData(extras.getString(App.AGE),
+                                                extras.getString(App.GENDER),
+                                                extras.getString(App.ANIMAL),
+                                                extras.getString(App.SIZE));
+                }else{
+                    filterData = new FilterData();
+                }
+
+            }
+            else {
+
+                filterData = new FilterData(savedInstanceState.getString(App.AGE),
+                                            savedInstanceState.getString(App.GENDER),
+                                            savedInstanceState.getString(App.ANIMAL),
+                                            savedInstanceState.getString(App.SIZE));
+
+            }
+        }
+
+        GetPetsTask taskPetList = new GetPetsTask(filterData.age, filterData.gender, filterData.size, filterData.animal);
         taskPetList.execute((Void) null);
-
 
         //petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
         // TODO: If exposing deep links into your app, handle intents here.
@@ -105,6 +129,40 @@ public class PetItemListActivity extends Activity
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Toast.makeText(getApplicationContext(),"Restore!!",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(App.AGE,filterData.age);
+        outState.putString(App.ANIMAL,filterData.animal);
+        outState.putString(App.SIZE,filterData.size);
+        outState.putString(App.GENDER,filterData.gender);
+
+        Toast.makeText(getApplicationContext(),"Instance saved",Toast.LENGTH_LONG).show();
+        super.onSaveInstanceState(outState);
+    }
+
+    private class FilterData{
+
+        public String age;
+        public String gender;
+        public String animal;
+        public String size;
+
+        private FilterData(){}
+
+        private FilterData(String age, String gender, String animal, String size) {
+            this.age = age;
+            this.gender = gender;
+            this.animal = animal;
+            this.size = size;
+        }
+    }
 
     private class GetPetsTask extends AsyncTask<Void,Void,GetPetsRespond> {
 
@@ -148,4 +206,5 @@ public class PetItemListActivity extends Activity
             }
         }
     }
+
 }

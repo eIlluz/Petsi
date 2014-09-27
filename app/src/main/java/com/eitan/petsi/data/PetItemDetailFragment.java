@@ -28,7 +28,7 @@ import java.io.IOException;
  * in two-pane mode (on tablets) or a {@link PetItemDetailActivity}
  * on handsets.
  */
-public class PetItemDetailFragment extends Fragment {
+public class PetItemDetailFragment extends Fragment implements View.OnClickListener {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -38,8 +38,12 @@ public class PetItemDetailFragment extends Fragment {
 
     private Pet pet;
     private TextView petDesc;
-    private TextView petName;
     private ImageView petImage;
+
+    private TextView petSize;
+    private TextView petGender;
+    private TextView petAge;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,31 +71,58 @@ public class PetItemDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_petitem_detail, container, false);
 
-        petName = (TextView) rootView.findViewById(R.id.det_petName);
         //petDesc = (TextView) rootView.findViewById(R.id.det_petdesc);
         petImage = (ImageView) rootView.findViewById(R.id.det_petimage);
+
+        petSize = (TextView) rootView.findViewById(R.id.det_size_txt);
+        petGender = (TextView) rootView.findViewById(R.id.det_gender_txt);
+        petAge = (TextView) rootView.findViewById(R.id.det_age_txt);
 
         // Show the dummy content as text in a TextView.
         if (pet != null) {
 
             //petDesc.setText(pet.getPetDetails().getDescription());
-            petName.setText(pet.getPetDetails().getName());
-//            DisplayMetrics displaymetrics = new DisplayMetrics();
-//            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-//            int width = displaymetrics.widthPixels;
-//            int height = displaymetrics.heightPixels;
+
+            getActivity().getActionBar().setTitle(pet.getPetDetails().getName());
 
             petImage.setBackgroundColor(Color.BLUE);
+
+            if (petAge == null)
+                Toast.makeText(getActivity().getApplicationContext(),"NULL",Toast.LENGTH_LONG).show();
+
+            petAge.setText(Integer.toString(pet.getPetDetails().getAge()));
+            petSize.setText(pet.getPetDetails().getSize());
+            petGender.setText(pet.getPetDetails().getGender());
 
             Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)
                     .centerCrop().fit()
                     .into(petImage);
-
-
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+            case (R.id.det_call_btn):
+                sendMail();
+                break;
+            case (R.id.det_mail_btn):
+                callOwner();
+                break;
+        }
+
+    }
+
+    private void sendMail(){
+
+    }
+
+    private void callOwner(){
+
     }
 }
