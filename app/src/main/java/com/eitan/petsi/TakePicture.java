@@ -2,7 +2,6 @@ package com.eitan.petsi;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,7 +34,7 @@ public class TakePicture extends Activity implements View.OnClickListener{
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_take_picture);
+        setContentView(R.layout.activity_new_ad);
 
         petPicture = (ImageView)findViewById(R.id.picture);
         petPicture.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -100,7 +99,7 @@ public class TakePicture extends Activity implements View.OnClickListener{
 //            Bitmap imageBitmap = (Bitmap) extras.get("data");
             //petPicture.setImageBitmap(imageBitmap);
 
-            petPicture.setScaleType(ImageView.ScaleType.CENTER);
+            petPicture.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Picasso.with(getApplicationContext()).load(mCurrentPhotoPath)
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)

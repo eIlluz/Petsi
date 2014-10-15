@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".data.PetItemDetailActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_petitem_detail"
             android:parentActivityName=".data.PetItemListActivity" >
             <meta-data
@@ -35,6 +36,7 @@
                 android:value="com.eitan.petsi.data.PetItemListActivity" />
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".TakePicture"
             android:label="@string/title_activity_take_picture" >
         </activity>
