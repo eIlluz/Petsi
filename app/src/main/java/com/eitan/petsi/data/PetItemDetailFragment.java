@@ -19,9 +19,12 @@ import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 
 import com.eitan.petsi.data.dummy.DummyContent;
+import com.eitan.petsi.views.FavImage;
 import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -54,6 +57,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     private TextView ownerName;
     private TextView ownerAddress;
 
+    private FavImage favButton;
+    private TextView likesTex;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -84,7 +89,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
         callImageButton.setOnClickListener(this);
         emailImageButton = (ImageView)rootView.findViewById(R.id.det_mail_btn);
         emailImageButton.setOnClickListener(this);
-
+        favButton = (FavImage) rootView.findViewById(R.id.det_fav_btn);
+        favButton.setOnClickListener(this);
         petImage = (ImageView) rootView.findViewById(R.id.det_petimage);
 
         petSize = (TextView) rootView.findViewById(R.id.det_size_txt);
@@ -96,14 +102,15 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
         ownerAddress = (TextView) rootView.findViewById(R.id.det_owner_address);
         ownerName = (TextView) rootView.findViewById(R.id.det_owner_name);
 
+        likesTex = (TextView)rootView.findViewById(R.id.det_likes_txt);
+
+
         // Show the dummy content as text in a TextView.
         if (pet != null) {
 
             //petDesc.setText(pet.getPetDetails().getStory());
 
             getActivity().getActionBar().setTitle(pet.getPetDetails().getName());
-
-            petImage.setBackgroundColor(Color.BLUE);
 
             if (petAge == null)
                 Toast.makeText(getActivity().getApplicationContext(),"NULL",Toast.LENGTH_LONG).show();
@@ -116,6 +123,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
             ownerName.setText(pet.getOwnerDetails().getName());
             ownerAddress.setText(pet.getOwnerDetails().getAddress());
+
+            likesTex.setText(String.valueOf(pet.getAdData().getNumOfLikes()));
 
             Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
                     .placeholder(R.drawable.ic_dog)
@@ -136,6 +145,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
                 break;
             case (R.id.det_mail_btn):
                 callOwner();
+                break;
+            case (R.id.det_fav_btn):
                 break;
         }
 
