@@ -10,17 +10,17 @@ public class PetDetails {
     private int age;
     private String type;
     private String otherInfo;
-    private String description;
+    private String story;
     private String photoUrl;
     private String size;
 
-    public PetDetails(String name, String gender, int age, String type, String otherInfo, String description, String photoUrl, String size) {
+    public PetDetails(String name, String gender, int age, String type, String otherInfo, String story, String photoUrl, String size) {
         this.name = name;
         Gender = gender;
         this.age = age;
         this.type = type;
         this.otherInfo = otherInfo;
-        this.description = description;
+        this.story = story;
         this.photoUrl = photoUrl;
         this.size = size;
     }
@@ -65,12 +65,12 @@ public class PetDetails {
         this.otherInfo = otherInfo;
     }
 
-    public String getDescription() {
-        return description;
+    public String getStory() {
+        return story;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStory(String story) {
+        this.story = story;
     }
 
     public String getPhotoUrl() {

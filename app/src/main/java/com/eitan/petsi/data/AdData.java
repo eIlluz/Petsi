@@ -14,13 +14,15 @@ public class AdData {
     private Calendar lastUpdate;
     private Calendar createdOn;
     private String adStatus;
+    private int numOfLikes;
 
-    public AdData(String adID, String userName, Calendar lastUpdate, Calendar createdOn, String adStatus) {
+    public AdData(String adID, String userName, Calendar lastUpdate, Calendar createdOn, String adStatus, int numOfLikes) {
         this.adID = adID;
         this.userName = userName;
         this.lastUpdate = lastUpdate;
         this.createdOn = createdOn;
         this.adStatus = adStatus;
+        this.numOfLikes = numOfLikes;
     }
 
     public String getAdID() {
@@ -61,5 +63,11 @@ public class AdData {
         this.adStatus = adStatus;
     }
 
+    public int getNumOfLikes() {
+        return numOfLikes;
+    }
 
+    public void setNumOfLikes(int numOfLikes) {
+        this.numOfLikes = numOfLikes;
+    }
 }

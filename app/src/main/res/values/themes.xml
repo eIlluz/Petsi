@@ -3,12 +3,17 @@
     <!-- the theme applied to the application or activity -->
     <style name="PetsiTheme"
         parent="@android:style/Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarStyle">@style/PetsiTheme.MyActionBar</item>
     </style>
 
     <!-- ActionBar styles -->
-    <style name="MyActionBar"
+    <style name="PetsiTheme.MyActionBar"
         parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/purple</item>
+        <item name="android:background">@color/color_action_bar</item>
+        <item name="android:titleTextStyle">@style/PetsiTheme.MyActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="PetsiTheme.MyActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#000000</item>
     </style>
 </resources>

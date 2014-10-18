@@ -28,7 +28,6 @@
         </activity>
         <activity
             android:name=".data.PetItemDetailActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_petitem_detail"
             android:parentActivityName=".data.PetItemListActivity" >
             <meta-data
@@ -47,6 +46,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 

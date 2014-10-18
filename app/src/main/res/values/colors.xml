@@ -2,6 +2,7 @@
 <resources>
 
     <item name="purple" type="color">#AA66CC</item>
+    <item name="color_action_bar" type="color">#FFFFFF</item>
 </resources>
 
 

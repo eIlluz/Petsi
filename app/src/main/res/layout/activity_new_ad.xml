@@ -30,16 +30,19 @@
         android:layout_gravity="top"
         android:paddingLeft="10dp">
 
-        <TextView
-            android:id="@+id/det_petName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="My name"
-            android:layout_gravity="top"
-            android:textSize="25sp"
-            android:gravity="top" />
+            <TextView
+                android:id="@+id/det_petName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="My name"
+                android:layout_gravity="top"
+                android:textSize="25sp"
+                android:gravity="top" />
+
+
 
     </LinearLayout>
+
 
 
 </LinearLayout>
