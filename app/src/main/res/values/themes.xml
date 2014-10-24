@@ -4,6 +4,7 @@
     <style name="PetsiTheme"
         parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/PetsiTheme.MyActionBar</item>
+        <item name="android:windowBackground">@color/app_background</item>
     </style>
 
     <!-- ActionBar styles -->

@@ -16,5 +16,6 @@
     <string name="title_activity_take_picture">TakePicture</string>
     <string name="hello_world">Hello world!</string>
     <string name="new_add">New Ad</string>
+    <string name="title_activity_start">Hello!</string>
 
 </resources>

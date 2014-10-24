@@ -5,13 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -28,35 +26,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eitan.petsi.com.eitan.petsi.services.RegFailedException;
-import com.eitan.petsi.com.eitan.petsi.services.RegisterCallBack;
-import com.eitan.petsi.com.eitan.petsi.services.RegisterNewUser;
+import com.eitan.petsi.com.eitan.petsi.services.LoginResponse;
+import com.eitan.petsi.com.eitan.petsi.services.UserLogin;
+import com.eitan.petsi.com.eitan.petsi.services.UserLoginRespond;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.RetrofitError;
 
 
 /**
  * A login screen that offers login via email/password.
 
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
+public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, UserLoginRespond{
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "b@e.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserLogin mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mUserName;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -65,11 +59,18 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Hide action bar
+        getActionBar().hide();
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
+
+
         mPasswordView = (EditText) findViewById(R.id.password);
+        mUserName = (EditText) findViewById(R.id.user_name);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -89,13 +90,33 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             }
         });
 
+        Button mEmailRegisterButton = (Button) findViewById(R.id.email_register_button);
+        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+        //Check if Login or SignUp
+        Bundle extras = getIntent().getExtras();
+
+        if (extras.getString(App.LOGIN_PARAM) == App.SIGN_UP){
+            mEmailSignInButton.setVisibility(View.GONE);
+            mEmailRegisterButton.setVisibility(View.VISIBLE);
+            mUserName.setVisibility(View.VISIBLE);
+        }else{
+            mEmailRegisterButton.setVisibility(View.GONE);
+            mEmailSignInButton.setVisibility(View.VISIBLE);
+            mUserName.setVisibility(View.GONE);
+        }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        mEmailView.setText("b@e.com");
-        mPasswordView.setText("world");
+        mEmailView.setText("mezamern@gmail.com");
+        mPasswordView.setText("123456");
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
     }
@@ -153,17 +174,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask = new UserLogin(email,password,this);
+            mAuthTask.getLogin();
         }
     }
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+
+        //Check email is valid
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
+
+        //Check password is long enough
         return password.length() > 4;
     }
 
@@ -237,6 +260,34 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
     }
 
+    @Override
+    public void onLoginSuccess(LoginResponse loginResponse) {
+        onLoginTryEnd();
+
+        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onLoginFailed() {
+        onLoginTryEnd();
+
+        mPasswordView.setError(getString(R.string.error_incorrect_password));
+        mPasswordView.requestFocus();
+    }
+
+    @Override
+    public void onRestCallError(RetrofitError error) {
+        onLoginTryEnd();
+
+        Toast.makeText(this,getString(R.string.error_occurred),Toast.LENGTH_LONG).show();
+    }
+
+    private void onLoginTryEnd(){
+        showProgress(false);
+        mAuthTask = null;
+    }
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -261,65 +312,65 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, RegResponse> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected RegResponse doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                return new RegResponse(false,getString(R.string.error_occurred));
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return new RegResponse(pieces[1].equals(mPassword),getString(R.string.error_incorrect_password));
-                }
-            }
-
-            try {
-                new RegisterNewUser(mEmail,mPassword).RegisterUser();
-            } catch (RegFailedException e) {
-                return new RegResponse(false,e.getMessage());
-            }
-            return new RegResponse(true,"");
-        }
-
-        @Override
-        protected void onPostExecute(final RegResponse response) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (response.isSuccess()) {
-
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                finish();
-
-            } else {
-                mPasswordView.setError(response.getMessage());
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
+//    public class UserLoginTask extends AsyncTask<Void, Void, RegResponse> {
+//
+//        private final String mEmail;
+//        private final String mPassword;
+//
+//        UserLoginTask(String email, String password) {
+//            mEmail = email;
+//            mPassword = password;
+//        }
+//
+//        @Override
+//        protected RegResponse doInBackground(Void... params) {
+//            // TODO: attempt authentication against a network service.
+//
+//            try {
+//                // Simulate network access.
+//                Thread.sleep(500);
+//            } catch (InterruptedException e) {
+//                return new RegResponse(false,getString(R.string.error_occurred));
+//            }
+//
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return new RegResponse(pieces[1].equals(mPassword),getString(R.string.error_incorrect_password));
+//                }
+//            }
+//
+//            try {
+//                new RegisterNewUser(mEmail,mPassword).RegisterUser();
+//            } catch (RegFailedException e) {
+//                return new RegResponse(false,e.getMessage());
+//            }
+//            return new RegResponse(true,"");
+//        }
+//
+//        @Override
+//        protected void onPostExecute(final RegResponse response) {
+//            mAuthTask = null;
+//            showProgress(false);
+//
+//            if (response.isSuccess()) {
+//
+//                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//                finish();
+//
+//            } else {
+//                mPasswordView.setError(response.getMessage());
+//                mPasswordView.requestFocus();
+//            }
+//        }
+//
+//        @Override
+//        protected void onCancelled() {
+//            mAuthTask = null;
+//            showProgress(false);
+//        }
+//    }
 }
 
 

@@ -42,6 +42,19 @@
                     android:singleLine="true"/>
 
                 <EditText
+                    android:id="@+id/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_user_name"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHighlight="@color/purple"/>
+
+                <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,19 +66,38 @@
                     android:maxLines="1"
                     android:singleLine="true"/>
 
-                <info.hoang8f.widget.FButton
-                    fbutton:buttonColor="@color/purple"
-                    fbutton:shadowColor="@color/fbutton_color_asbestos"
-                    fbutton:shadowEnabled="true"
-                    fbutton:shadowHeight="3dp"
-                    fbutton:cornerRadius="1dp"
-                    android:id="@+id/email_sign_in_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in"
-                    android:textStyle="bold"/>
 
+                    <info.hoang8f.widget.FButton
+                        fbutton:buttonColor="@color/purple"
+                        fbutton:shadowColor="@color/fbutton_color_asbestos"
+                        fbutton:shadowEnabled="true"
+                        fbutton:shadowHeight="2dp"
+                        fbutton:cornerRadius="1dp"
+                        android:id="@+id/email_sign_in_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_sign_in"
+                        android:textStyle="bold"
+                        android:textColor="@color/common_signin_btn_dark_text_default"
+                        android:layout_weight="1"
+                        android:layout_marginRight="2dp"/>
+
+                    <info.hoang8f.widget.FButton
+                        fbutton:buttonColor="@color/purple"
+                        fbutton:shadowColor="@color/fbutton_color_asbestos"
+                        fbutton:shadowEnabled="true"
+                        fbutton:shadowHeight="2dp"
+                        fbutton:cornerRadius="1dp"
+                        android:id="@+id/email_register_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_register"
+                        android:textStyle="bold"
+                        android:textColor="@color/common_signin_btn_dark_text_default"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="2dp"/>
 
             </LinearLayout>
     </ScrollView>

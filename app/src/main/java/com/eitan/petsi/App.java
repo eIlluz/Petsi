@@ -15,6 +15,10 @@ public class App extends Application {
     public static final String ANIMAL = "Animal";
     public static final String GENDER = "Gender";
 
+    public static final String LOGIN_PARAM = "login_param";
+    public static final String LOGIN = "login";
+    public static final String SIGN_UP = "signup";
+
     public PetListProvider petListProvider = new PetListProvider();
 
     private static Context mContext;
