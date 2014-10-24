@@ -104,14 +104,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
         //Check if Login or SignUp
         Bundle extras = getIntent().getExtras();
 
-        if (extras.getString(App.LOGIN_PARAM) == App.SIGN_UP){
+        System.out.println("extra = " + extras.getString(App.LOGIN_PARAM));
+        String mode = extras.getString(App.LOGIN_PARAM);
+        System.out.println("mode = " + mode + "; " + "App.SIGN_UP = " + App.SIGN_UP + "; " + "App.LOGIN = " + App.LOGIN);
+        if (mode == App.SIGN_UP){
             mEmailSignInButton.setVisibility(View.GONE);
             mEmailRegisterButton.setVisibility(View.VISIBLE);
             mUserName.setVisibility(View.VISIBLE);
-        }else{
+            System.out.println("========SIGNUP=========");
+
+        }else if (mode == App.LOGIN){
             mEmailRegisterButton.setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.VISIBLE);
             mUserName.setVisibility(View.GONE);
+            System.out.println("========LOGIN=========");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

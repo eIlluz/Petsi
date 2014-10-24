@@ -64,6 +64,7 @@ public class StartActivity extends Activity implements View.OnClickListener{
         Intent intent = new Intent(this,LoginActivity.class);
         intent.putExtra(App.LOGIN_PARAM,mode);
 
+        System.out.println("Mode = " + mode);
         startActivity(intent);
     }
 }
