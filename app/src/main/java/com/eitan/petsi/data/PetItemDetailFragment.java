@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 
+import com.eitan.petsi.aws.FileDownloadCallBack;
 import com.eitan.petsi.data.dummy.DummyContent;
 import com.eitan.petsi.views.FavImage;
 import com.google.android.gms.plus.model.people.Person;
@@ -26,6 +27,7 @@ import com.squareup.picasso.RequestCreator;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -34,7 +36,7 @@ import java.io.IOException;
  * in two-pane mode (on tablets) or a {@link PetItemDetailActivity}
  * on handsets.
  */
-public class PetItemDetailFragment extends Fragment implements View.OnClickListener {
+public class PetItemDetailFragment extends Fragment implements View.OnClickListener, FileDownloadCallBack {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -126,11 +128,13 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
             likesTex.setText(String.valueOf(pet.getAdData().getNumOfLikes()));
 
-            Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
-                    .placeholder(R.drawable.ic_dog)
-                    .error(R.drawable.ic_launcher)
-                    .centerCrop().fit()
-                    .into(petImage);
+            App app = (App)getActivity().getApplication();
+            app.getFileForS3Key(pet.getPetDetails().getPhotoUrl(),this);
+//            Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
+//                    .placeholder(R.drawable.ic_dog)
+//                    .error(R.drawable.ic_launcher)
+//                    .centerCrop().fit()
+//                    .into(petImage);
         }
 
         return rootView;
@@ -167,5 +171,15 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
         /* Send it off to the Activity-Chooser */
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 
+    }
+
+    @Override
+    public void onFileDowloaded(File file) {
+
+        Picasso.with(getActivity().getApplicationContext()).load(file)
+                .placeholder(R.drawable.ic_dog)
+                .error(R.drawable.ic_launcher)
+                .centerCrop().fit()
+                .into(petImage);
     }
 }

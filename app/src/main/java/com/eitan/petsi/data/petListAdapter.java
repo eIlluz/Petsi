@@ -55,11 +55,11 @@ public class petListAdapter extends ArrayAdapter<Pet>
         holder.petOtherInfo.setText(mPetList.get(position).getPetDetails().getGender() + ", " +
                 mPetList.get(position).getPetDetails().getAge() + ", " +
                 mPetList.get(position).getPetDetails().getSize());
-        Picasso.with(mContext).load(mPetList.get(position).getPetDetails().getPhotoUrl())
-                .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
-               .placeholder(R.drawable.ic_dog)
-               .error(R.drawable.ic_launcher)
-               .into(holder.petImage);
+//        Picasso.with(mContext).load(mPetList.get(position).getPetDetails().getPhotoUrl())
+//                .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
+//               .placeholder(R.drawable.ic_dog)
+//               .error(R.drawable.ic_launcher)
+//               .into(holder.petImage);
 
         return convertView;
     }

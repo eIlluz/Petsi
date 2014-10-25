@@ -68,7 +68,7 @@ public class GetPetsByFilter
         cal.set(2014,Calendar.JANUARY,06);
         petsList.add(new Pet(new AdData("0001","eitanilluz@gmail.com",cal,cal,"open",7),
                 new OwnerDetails("Eitan","05050000","Tel Aviv","b@e.com"),
-                new PetDetails("Rexi","Male",2,"Dog","Very nice","Little nice dog","https://www.petfinder.com/wp-content/uploads/2012/11/200324209-001-petside-dog-removing-tick-632x475.jpg","Big")));
+                new PetDetails("Rexi","Male",2,"Dog","Very nice","Little nice dog","eitan-emr-1:imagaes/puppy.jpg","Big")));
 
         cal.set(2014,Calendar.APRIL,21);
         petsList.add(new Pet(new AdData("0005","b@mosh.com",cal,cal,"open",3),

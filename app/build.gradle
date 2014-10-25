@@ -37,5 +37,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okio:okio:1.0.1'
 
+    compile 'com.amazonaws:aws-java-sdk:1.8.11'
+
 
 }
