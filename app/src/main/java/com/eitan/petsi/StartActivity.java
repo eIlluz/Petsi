@@ -59,12 +59,11 @@ public class StartActivity extends Activity implements View.OnClickListener{
             startLoginSignUpActivity(App.SIGN_UP);
     }
 
-    private void startLoginSignUpActivity(String mode){
+    private void startLoginSignUpActivity(int mode){
 
         Intent intent = new Intent(this,LoginActivity.class);
         intent.putExtra(App.LOGIN_PARAM,mode);
 
-        System.out.println("Mode = " + mode);
         startActivity(intent);
     }
 }

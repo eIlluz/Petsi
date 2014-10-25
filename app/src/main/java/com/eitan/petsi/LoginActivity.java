@@ -94,7 +94,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
         mEmailRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptRegister();
             }
         });
 
@@ -104,20 +104,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
         //Check if Login or SignUp
         Bundle extras = getIntent().getExtras();
 
-        System.out.println("extra = " + extras.getString(App.LOGIN_PARAM));
-        String mode = extras.getString(App.LOGIN_PARAM);
-        System.out.println("mode = " + mode + "; " + "App.SIGN_UP = " + App.SIGN_UP + "; " + "App.LOGIN = " + App.LOGIN);
+        int mode = extras.getInt(App.LOGIN_PARAM);
+
         if (mode == App.SIGN_UP){
             mEmailSignInButton.setVisibility(View.GONE);
             mEmailRegisterButton.setVisibility(View.VISIBLE);
             mUserName.setVisibility(View.VISIBLE);
-            System.out.println("========SIGNUP=========");
 
         }else if (mode == App.LOGIN){
             mEmailRegisterButton.setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.VISIBLE);
             mUserName.setVisibility(View.GONE);
-            System.out.println("========LOGIN=========");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -132,30 +129,51 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     }
 
 
+    public void attemptRegister(){
+
+    }
+
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+
+        //Check that authentication is not already running.
         if (mAuthTask != null) {
             return;
         }
 
+        if (checkFieldsValidation(App.LOGIN)) {
+            // Store values at the time of the login attempt.
+            String email = mEmailView.getText().toString();
+            String password = mPasswordView.getText().toString();
+
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            mAuthTask = new UserLogin(email, password, this);
+            mAuthTask.getLogin();
+        }
+    }
+
+    private boolean checkFieldsValidation(int mode){
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
+        mUserName.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String userName = mUserName.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -172,18 +190,27 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
             cancel = true;
         }
 
+        if (mode == App.SIGN_UP){
+            if (TextUtils.isEmpty(userName)) {
+                mUserName.setError(getString(R.string.error_field_required));
+                focusView = mUserName;
+                cancel = true;
+            } else if (!isNameValid(userName)) {
+                mUserName.setError(getString(R.string.error_invalid_user_name));
+                focusView = mUserName;
+                cancel = true;
+            }
+        }
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLogin(email,password,this);
-            mAuthTask.getLogin();
         }
+
+        return (!cancel);
     }
+
+
     private boolean isEmailValid(String email) {
 
         //Check email is valid
@@ -194,6 +221,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
 
         //Check password is long enough
         return password.length() > 4;
+    }
+
+    private boolean isNameValid(String name){
+        return name.length() > 3;
     }
 
     /**

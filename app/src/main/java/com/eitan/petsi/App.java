@@ -16,8 +16,8 @@ public class App extends Application {
     public static final String GENDER = "Gender";
 
     public static final String LOGIN_PARAM = "login_param";
-    public static final String LOGIN = "login";
-    public static final String SIGN_UP = "signup";
+    public static final int LOGIN = 1;
+    public static final int SIGN_UP = 2;
 
     public PetListProvider petListProvider = new PetListProvider();
 
