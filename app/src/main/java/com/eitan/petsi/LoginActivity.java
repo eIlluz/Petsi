@@ -27,8 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eitan.petsi.com.eitan.petsi.services.LoginResponse;
+import com.eitan.petsi.com.eitan.petsi.services.RegisterResponse;
 import com.eitan.petsi.com.eitan.petsi.services.UserLogin;
 import com.eitan.petsi.com.eitan.petsi.services.UserLoginRespond;
+import com.eitan.petsi.com.eitan.petsi.services.UserRegister;
+import com.eitan.petsi.com.eitan.petsi.services.UserRegisterRespond;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +43,13 @@ import retrofit.RetrofitError;
  * A login screen that offers login via email/password.
 
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, UserLoginRespond{
+public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, UserLoginRespond, UserRegisterRespond{
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLogin mAuthTask = null;
+    private UserRegister mRegisterTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -129,10 +133,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     }
 
 
-    public void attemptRegister(){
-
-    }
-
     /**
      * Attempts to sign in.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -158,6 +158,30 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
         }
     }
 
+    /**
+     * Attempts to register user.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    public void attemptRegister() {
+
+        //Check that authentication is not already running.
+        if (mRegisterTask != null) {
+            return;
+        }
+
+        if (checkFieldsValidation(App.SIGN_UP)) {
+            // Store values at the time of the login attempt.
+            String email = mEmailView.getText().toString();
+            String password = mPasswordView.getText().toString();
+
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            mRegisterTask = new UserRegister(email, password, mUserName.getText().toString(), this);
+            mRegisterTask.registerUser();
+        }
+    }
     private boolean checkFieldsValidation(int mode){
         // Reset errors.
         mEmailView.setError(null);
@@ -311,6 +335,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
 
         mPasswordView.setError(getString(R.string.error_incorrect_password));
         mPasswordView.requestFocus();
+    }
+
+    @Override
+    public void onRegisterSuccess(RegisterResponse registerResponse) {
+        onLoginTryEnd();
+
+        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onRegisterFailed() {
+        mEmailView.setError(getString(R.string.error_exist_user_name));
     }
 
     @Override

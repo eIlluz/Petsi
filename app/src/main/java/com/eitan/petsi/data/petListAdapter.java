@@ -9,10 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.eitan.petsi.App;
 import com.eitan.petsi.R;
+import com.eitan.petsi.aws.FileDownloadCallBack;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -55,11 +58,17 @@ public class petListAdapter extends ArrayAdapter<Pet>
         holder.petOtherInfo.setText(mPetList.get(position).getPetDetails().getGender() + ", " +
                 mPetList.get(position).getPetDetails().getAge() + ", " +
                 mPetList.get(position).getPetDetails().getSize());
-//        Picasso.with(mContext).load(mPetList.get(position).getPetDetails().getPhotoUrl())
-//                .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
-//               .placeholder(R.drawable.ic_dog)
-//               .error(R.drawable.ic_launcher)
-//               .into(holder.petImage);
+
+        Activity activity = (Activity)mContext;
+        App app = (App)activity.getApplication();
+        //app.getFileForS3Key(mPetList.get(position).getPetDetails().getPhotoUrl(),new FileDownloadCallBackPicasso(holder));
+
+
+        Picasso.with(mContext).load(mPetList.get(position).getPetDetails().getPhotoUrl())
+                .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
+               .placeholder(R.drawable.ic_dog)
+               .error(R.drawable.ic_launcher)
+               .into(holder.petImage);
 
         return convertView;
     }
@@ -69,6 +78,25 @@ public class petListAdapter extends ArrayAdapter<Pet>
         public ImageView petImage;
         public TextView petOtherInfo;
 
+    }
+
+    private class FileDownloadCallBackPicasso implements FileDownloadCallBack{
+
+        ViewHolder holder;
+
+        private FileDownloadCallBackPicasso(ViewHolder holder) {
+            this.holder = holder;
+        }
+
+        @Override
+        public void onFileDowloaded(File file) {
+
+            Picasso.with(mContext).load(file)
+                    .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
+                    .placeholder(R.drawable.ic_dog)
+                    .error(R.drawable.ic_launcher)
+                    .into(holder.petImage);
+        }
     }
 
 }

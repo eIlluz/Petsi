@@ -26,6 +26,7 @@ public class UserLogin implements Callback<LoginResponse>{
 
     @Override
     public void success(LoginResponse loginResponse, Response response) {
+
         if (loginResponse == null){
             userLoginRespond.onLoginFailed();
         }else{

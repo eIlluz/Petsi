@@ -129,12 +129,12 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
             likesTex.setText(String.valueOf(pet.getAdData().getNumOfLikes()));
 
             App app = (App)getActivity().getApplication();
-            app.getFileForS3Key(pet.getPetDetails().getPhotoUrl(),this);
-//            Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
-//                    .placeholder(R.drawable.ic_dog)
-//                    .error(R.drawable.ic_launcher)
-//                    .centerCrop().fit()
-//                    .into(petImage);
+//            app.getFileForS3Key(pet.getPetDetails().getPhotoUrl(),this);
+            Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
+                    .placeholder(R.drawable.ic_dog)
+                    .error(R.drawable.ic_launcher)
+                    .centerCrop().fit()
+                    .into(petImage);
         }
 
         return rootView;
