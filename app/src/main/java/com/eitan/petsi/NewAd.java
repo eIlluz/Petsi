@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
+import com.eitan.petsi.aws.FileUploadCallBack;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -19,26 +21,36 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import info.hoang8f.widget.FButton;
 
-public class NewAd extends Activity implements View.OnClickListener{
+
+public class NewAd extends Activity implements View.OnClickListener, FileUploadCallBack{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private ImageView petPicture;
     private static Boolean done = false;
     private String mCurrentPhotoPath;
+    private File pictureFile = null;
+    private FButton saveButton;
 
+    private App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
+        app = (App)getApplication();
+
         setContentView(R.layout.activity_new_ad);
 
         petPicture = (ImageView)findViewById(R.id.picture);
         petPicture.setScaleType(ImageView.ScaleType.FIT_CENTER);
         petPicture.setOnClickListener(this);
+
+        saveButton = (FButton)findViewById(R.id.save_new_ad);
+        saveButton.setOnClickListener(this);
     }
 
 
@@ -73,16 +85,16 @@ public class NewAd extends Activity implements View.OnClickListener{
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
-            File photoFile = null;
+            pictureFile = null;
             try {
-                photoFile = createImageFile();
+                pictureFile = createImageFile();
             } catch (IOException ex) {
 
                 handleError(ex.getMessage());
             }
 
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(photoFile));
+                    Uri.fromFile(pictureFile));
 
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
@@ -135,6 +147,20 @@ public class NewAd extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        startCamera();
+
+        if (view.getId() == R.id.picture)
+            startCamera();
+        else if (view.getId() == R.id.save_new_ad)
+            saveNewAd();
+    }
+
+    private void saveNewAd(){
+
+        app.uploadImageToS3("i_am_working.jpg",pictureFile,this);
+    }
+
+    @Override
+    public void onUploadToS3Completed(UploadResult uploadResult) {
+        Toast.makeText(this,uploadResult.getKey(),Toast.LENGTH_LONG).show();
     }
 }

@@ -1,6 +1,7 @@
 package com.eitan.petsi.aws;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -8,7 +9,9 @@ import com.amazonaws.mobileconnectors.s3.transfermanager.Download;
 import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.amazonaws.mobileconnectors.s3.transfermanager.Upload;
 import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.eitan.petsi.R;
 
 
@@ -37,23 +40,62 @@ public class S3Provider {
         transferManager  = new TransferManager(awsCredentials);
     }
 
-    public String uploadImage(String file_name,File file){
+    public void uploadImage(String fileName,File file, FileUploadCallBack fileUploadCallBack){
 
-        String file_key = IMAGES_PREFIX + file_name;
-        Upload upload = transferManager.upload(IMAGES_BUCKET_NAME,file_key,file);
+        String fileKey = IMAGES_PREFIX + fileName;
 
-        try {
-            UploadResult uploadResult = upload.waitForUploadResult();
+        UploadToS3AsynchTask uploadToS3AsynchTask = new UploadToS3AsynchTask(fileUploadCallBack);
+        uploadToS3AsynchTask.execute(new FileToUpload(IMAGES_BUCKET_NAME,fileKey,file));
+    }
 
-            if (uploadResult.getKey().isEmpty())
-                return null;
-            else return uploadResult.getKey();
+    private class FileToUpload{
+        public String bucketName;
+        public String key;
+        public File file;
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
+        private FileToUpload(String bucketName, String key, File file) {
+            this.bucketName = bucketName;
+            this.key = key;
+            this.file = file;
         }
-        
+    }
+
+    private class UploadToS3AsynchTask extends AsyncTask<FileToUpload,Integer,UploadResult>{
+
+        private FileUploadCallBack fileUploadCallBack;
+
+        public UploadToS3AsynchTask(FileUploadCallBack fileUploadCallBack) {
+            this.fileUploadCallBack = fileUploadCallBack;
+        }
+
+        @Override
+        protected UploadResult doInBackground(FileToUpload... fileToUploads) {
+
+            //Upload upload = transferManager.upload(fileToUploads[0].bucketName,fileToUploads[0].key,fileToUploads[0].file);
+
+            PutObjectRequest putObjectRequest = new PutObjectRequest(fileToUploads[0].bucketName,fileToUploads[0].key,fileToUploads[0].file);
+            putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
+
+            Upload upload = transferManager.upload(putObjectRequest);
+//            transferManager.upload(PutObjectRequest)
+            try {
+                UploadResult uploadResult = upload.waitForUploadResult();
+
+                if (uploadResult.getKey().isEmpty())
+                    return null;
+                else return uploadResult;
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(UploadResult uploadResult) {
+
+            fileUploadCallBack.onUploadToS3Completed(uploadResult);
+        }
     }
 
     public void getFileForKey(String key, FileDownloadCallBack callback){

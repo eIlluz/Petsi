@@ -17,4 +17,7 @@
 
     <string name="user_exist_already">User name already in use</string>
     <string name="error_occurred">Error Occurred</string>
+
+    <string name="save_ad">Save</string>
+    <string name="discard_ad">Discard</string>
 </resources>

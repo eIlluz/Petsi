@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.eitan.petsi.aws.FileDownloadCallBack;
+import com.eitan.petsi.aws.FileUploadCallBack;
 import com.eitan.petsi.aws.S3Provider;
 import com.eitan.petsi.data.PetListProvider;
 
@@ -44,4 +45,9 @@ public class App extends Application {
     public void getFileForS3Key(String key, FileDownloadCallBack fileDownloadCallBack){
         s3Provider.getFileForKey(key,fileDownloadCallBack);
     }
+
+    public void uploadImageToS3(String fileName,File file, FileUploadCallBack fileUploadCallBack){
+        s3Provider.uploadImage(fileName,file,fileUploadCallBack);
+    }
 }
+

@@ -1,22 +1,11 @@
 package com.eitan.petsi.data;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import com.eitan.petsi.App;
-import com.eitan.petsi.R;
-
-import com.eitan.petsi.com.eitan.petsi.services.GetPetsByFilter;
-import com.eitan.petsi.com.eitan.petsi.services.GetPetsException;
-import com.eitan.petsi.com.eitan.petsi.services.GetPetsRespond;
-import com.eitan.petsi.data.dummy.DummyContent;
-
 import java.util.ArrayList;
 
 /**

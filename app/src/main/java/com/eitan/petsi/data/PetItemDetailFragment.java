@@ -1,34 +1,21 @@
 package com.eitan.petsi.data;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
-
 import com.eitan.petsi.aws.FileDownloadCallBack;
-import com.eitan.petsi.data.dummy.DummyContent;
 import com.eitan.petsi.views.FavImage;
-import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.IOException;
 
 /**
  * A fragment representing a single PetItem detail screen.
