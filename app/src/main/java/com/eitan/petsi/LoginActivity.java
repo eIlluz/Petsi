@@ -98,6 +98,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
         mEmailRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("I was clicked!");
                 attemptRegister();
             }
         });
@@ -339,7 +340,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
 
     @Override
     public void onRegisterSuccess(RegisterResponse registerResponse) {
-        onLoginTryEnd();
+        onRegisterTryEnd();
 
         startActivity(new Intent(LoginActivity.this,MainActivity.class));
         finish();
@@ -347,7 +348,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
 
     @Override
     public void onRegisterFailed() {
+        onRegisterTryEnd();
         mEmailView.setError(getString(R.string.error_exist_user_name));
+        mEmailView.requestFocus();
     }
 
     @Override
@@ -361,6 +364,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
         showProgress(false);
         mAuthTask = null;
     }
+
+    private void onRegisterTryEnd(){
+        showProgress(false);
+        mRegisterTask = null;
+    }
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -381,70 +390,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
 
         mEmailView.setAdapter(adapter);
     }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-//    public class UserLoginTask extends AsyncTask<Void, Void, RegResponse> {
-//
-//        private final String mEmail;
-//        private final String mPassword;
-//
-//        UserLoginTask(String email, String password) {
-//            mEmail = email;
-//            mPassword = password;
-//        }
-//
-//        @Override
-//        protected RegResponse doInBackground(Void... params) {
-//            // TODO: attempt authentication against a network service.
-//
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(500);
-//            } catch (InterruptedException e) {
-//                return new RegResponse(false,getString(R.string.error_occurred));
-//            }
-//
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return new RegResponse(pieces[1].equals(mPassword),getString(R.string.error_incorrect_password));
-//                }
-//            }
-//
-//            try {
-//                new RegisterNewUser(mEmail,mPassword).RegisterUser();
-//            } catch (RegFailedException e) {
-//                return new RegResponse(false,e.getMessage());
-//            }
-//            return new RegResponse(true,"");
-//        }
-//
-//        @Override
-//        protected void onPostExecute(final RegResponse response) {
-//            mAuthTask = null;
-//            showProgress(false);
-//
-//            if (response.isSuccess()) {
-//
-//                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//                finish();
-//
-//            } else {
-//                mPasswordView.setError(response.getMessage());
-//                mPasswordView.requestFocus();
-//            }
-//        }
-//
-//        @Override
-//        protected void onCancelled() {
-//            mAuthTask = null;
-//            showProgress(false);
-//        }
-//    }
 }
 
 

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip" >
+    android:padding="6dip"
+    android:descendantFocusability="blocksDescendants">
 
     <ImageView
         android:id="@+id/petimage"
@@ -18,27 +19,43 @@
 
     <TextView
         android:id="@+id/petname"
-        android:layout_width="fill_parent"
+        android:layout_width="170dp"
         android:layout_height="26dip"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentRight="false"
         android:layout_toRightOf="@id/petimage"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dip"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:focusable="false"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:text="Bob"
+        android:layout_alignParentLeft="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentBottom="false" />
 
     <TextView
         android:id="@+id/petDetails"
-        android:layout_width="fill_parent"
+        android:layout_width="170dp"
         android:layout_height="26dip"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentRight="false"
         android:layout_toRightOf="@id/petimage"
         android:layout_below="@id/petname"
         android:layout_marginLeft="10dip"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:focusable="false"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:text="Details"/>
+
+    <com.eitan.petsi.views.FavImage
+        android:id="@+id/det_fav_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_toRightOf="@+id/petDetails"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_centerVertical="true" />
 </RelativeLayout>

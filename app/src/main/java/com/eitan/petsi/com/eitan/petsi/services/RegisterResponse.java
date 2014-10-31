@@ -5,27 +5,27 @@ package com.eitan.petsi.com.eitan.petsi.services;
  */
 public class RegisterResponse {
 
-    private String name;
-    private String mailAddress;
+    private String text;
+    private boolean success;
 
-    public RegisterResponse(String name, String mailAddress) {
-        this.name = name;
-        this.mailAddress = mailAddress;
+    public RegisterResponse(String text, boolean success) {
+        this.text = text;
+        this.success = success;
     }
 
-    public String getName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getMailAddress() {
-        return mailAddress;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setMailAddress(String mailAddress) {
-        this.mailAddress = mailAddress;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

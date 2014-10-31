@@ -29,14 +29,12 @@ public class UserRegister implements Callback<RegisterResponse>{
     @Override
     public void success(RegisterResponse registerResponse, Response response) {
 
-//        if (loginResponse == null){
-//            userRegisterRespond.onLoginFailed();
-//        }else{
-//            userRegisterRespond.onLoginSuccess(loginResponse);
-//        }
-        userRegisterRespond.onRegisterSuccess(registerResponse);
+        if (registerResponse.isSuccess()){
+            userRegisterRespond.onRegisterSuccess(registerResponse);
+        }else{
+            userRegisterRespond.onRegisterFailed();
+        }
     }
-
 
     @Override
     public void failure(RetrofitError error) {
