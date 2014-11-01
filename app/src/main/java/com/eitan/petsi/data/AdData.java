@@ -11,12 +11,12 @@ public class AdData {
 
     private String adID;
     private String userName;
-    private Calendar lastUpdate;
-    private Calendar createdOn;
+    private Date lastUpdate;
+    private Date createdOn;
     private String adStatus;
     private int numOfLikes;
 
-    public AdData(String adID, String userName, Calendar lastUpdate, Calendar createdOn, String adStatus, int numOfLikes) {
+    public AdData(String adID, String userName, Date lastUpdate, Date createdOn, String adStatus, int numOfLikes) {
         this.adID = adID;
         this.userName = userName;
         this.lastUpdate = lastUpdate;
@@ -41,17 +41,17 @@ public class AdData {
         this.userName = userName;
     }
 
-    public Calendar getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Calendar lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
-    public Calendar getCreatedOn() {return createdOn; }
+    public Date getCreatedOn() {return createdOn; }
 
-    public void setCreatedOn(Calendar createdOn) {
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
     }
 

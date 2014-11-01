@@ -28,9 +28,9 @@ import android.widget.Toast;
 
 import com.eitan.petsi.com.eitan.petsi.services.LoginResponse;
 import com.eitan.petsi.com.eitan.petsi.services.RegisterResponse;
-import com.eitan.petsi.com.eitan.petsi.services.UserLogin;
+import com.eitan.petsi.com.eitan.petsi.services.UserLoginTask;
 import com.eitan.petsi.com.eitan.petsi.services.UserLoginRespond;
-import com.eitan.petsi.com.eitan.petsi.services.UserRegister;
+import com.eitan.petsi.com.eitan.petsi.services.UserRegisterTask;
 import com.eitan.petsi.com.eitan.petsi.services.UserRegisterRespond;
 
 import java.util.ArrayList;
@@ -48,8 +48,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLogin mAuthTask = null;
-    private UserRegister mRegisterTask = null;
+    private UserLoginTask mAuthTask = null;
+    private UserRegisterTask mRegisterTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -154,7 +154,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLogin(email, password, this);
+            mAuthTask = new UserLoginTask(email, password, this);
             mAuthTask.getLogin();
         }
     }
@@ -179,7 +179,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mRegisterTask = new UserRegister(email, password, mUserName.getText().toString(), this);
+            mRegisterTask = new UserRegisterTask(email, password, mUserName.getText().toString(), this);
             mRegisterTask.registerUser();
         }
     }

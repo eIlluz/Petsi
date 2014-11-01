@@ -7,13 +7,13 @@ import retrofit.client.Response;
 /**
  * Created by eitan on 24/10/2014.
  */
-public class UserLogin implements Callback<LoginResponse>{
+public class UserLoginTask implements Callback<LoginResponse>{
 
     private UserLoginRespond userLoginRespond;
     private String userName;
     private String password;
 
-    public UserLogin(String userName, String password,UserLoginRespond userLoginRespond){
+    public UserLoginTask(String userName, String password, UserLoginRespond userLoginRespond){
         this.userLoginRespond = userLoginRespond;
         this.userName = userName;
         this.password = password;

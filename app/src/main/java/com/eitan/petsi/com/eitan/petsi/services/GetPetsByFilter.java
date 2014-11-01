@@ -66,43 +66,43 @@ public class GetPetsByFilter
         Calendar cal = Calendar.getInstance();
 
         cal.set(2014,Calendar.JANUARY,06);
-        petsList.add(new Pet(new AdData("0001","eitanilluz@gmail.com",cal,cal,"open",7),
+        petsList.add(new Pet(new AdData("0001","eitanilluz@gmail.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",7),
                 new OwnerDetails("Eitan","05050000","Tel Aviv","b@e.com"),
                 new PetDetails("Rexi","Male",2,"Dog","Very nice","Little nice dog",
                         "http://petsi-bucket.s3.amazonaws.com/pets-pictures/puppy.jpg","Big")));
 
         cal.set(2014,Calendar.APRIL,21);
-        petsList.add(new Pet(new AdData("0005","b@mosh.com",cal,cal,"open",3),
+        petsList.add(new Pet(new AdData("0005","b@mosh.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",3),
                 new OwnerDetails("Eitan","05050000","Tel Aviv","b@e.com"),
                 new PetDetails("Shmoop","Male",2,"Dog","cool dog!","Big dog with bigger heart",
                         "http://petsi-bucket.s3.amazonaws.com/pets-pictures/Shmoop.jpg","Big")));
 
         cal.set(2014, Calendar.JULY, 12);
-        petsList.add(new Pet(new AdData("0019","b@michal.com",cal,cal,"open",1),
+        petsList.add(new Pet(new AdData("0019","b@michal.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",1),
                 new OwnerDetails("Eitan","05050000","Tel Aviv","b@e.com"),
                     new PetDetails("Seal","Female",2,"Cat","Very nice","Little nice cat",
                             "http://petsi-bucket.s3.amazonaws.com/pets-pictures/Seal.jpg","Big")));
 
         cal.set(2014,Calendar.MARCH,16);
-        petsList.add(new Pet(new AdData("0022","b@eitan.com",cal,cal,"open",6),
+        petsList.add(new Pet(new AdData("0022","b@eitan.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",6),
                 new OwnerDetails("Eitan","05050000","Tel Aviv","b@e.com"),
                 new PetDetails("Joom","Male",4,"Dog","funky dog","good with children",
                         "http://petsi-bucket.s3.amazonaws.com/pets-pictures/Joom.jpg","Big")));
 
         cal.set(2014,Calendar.APRIL,01);
-        petsList.add(new Pet(new AdData("0035","b@mosh.com",cal,cal,"open",11),
+        petsList.add(new Pet(new AdData("0035","b@mosh.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",11),
                 new OwnerDetails("Shlomo","05012345","Haifa","b@e.com"),
                 new PetDetails("Cook","Male",2,"Dog","Speeeedy","Best friend of man, really good with children",
                         "http://petsi-bucket.s3.amazonaws.com/pets-pictures/Cook.jpg","Big")));
 
         cal.set(2014, Calendar.DECEMBER, 22);
-        petsList.add(new Pet(new AdData("0049","b@michal.com",cal,cal,"open",25),
+        petsList.add(new Pet(new AdData("0049","b@michal.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",25),
                 new OwnerDetails("Shlomo","05012345","Haifa","b@e.com"),
                 new PetDetails("kitty","Female",1,"Cat","your cat!","Kitty is beautiful and playful kitten. She was saved from a street life and now looking for a loving home",
                         "http://petsi-bucket.s3.amazonaws.com/pets-pictures/kitty.jpg","Small")));
 
         cal.set(2014, Calendar.MAY, 03);
-        petsList.add(new Pet(new AdData("0051","b@michal.com",cal,cal,"open",7),
+        petsList.add(new Pet(new AdData("0051","b@michal.com",new Date(cal.getTimeInMillis()),new Date(cal.getTimeInMillis()),"open",7),
                 new OwnerDetails("Shlomo","05012345","Haifa","b@e.com"),
                 new PetDetails("Bulb","Male",5,"Dog","Smart dog","Trained dog, happy and loving",
                         "http://petsi-bucket.s3.amazonaws.com/pets-pictures/Bulb.jpg","Small")));

@@ -7,14 +7,14 @@ import retrofit.client.Response;
 /**
  * Created by eitan on 24/10/2014.
  */
-public class UserRegister implements Callback<RegisterResponse>{
+public class UserRegisterTask implements Callback<RegisterResponse>{
 
     private UserRegisterRespond userRegisterRespond;
     private String userName;
     private String password;
     private String name;
 
-    public UserRegister(String userName, String password,String name, UserRegisterRespond userRegisterRespond){
+    public UserRegisterTask(String userName, String password, String name, UserRegisterRespond userRegisterRespond){
         this.userRegisterRespond = userRegisterRespond;
         this.userName = userName;
         this.password = password;

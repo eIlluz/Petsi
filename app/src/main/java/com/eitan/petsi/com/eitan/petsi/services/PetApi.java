@@ -1,9 +1,7 @@
 package com.eitan.petsi.com.eitan.petsi.services;
 
 import retrofit.Callback;
-import retrofit.http.Field;
 import retrofit.http.GET;
-import retrofit.http.POST;
 import retrofit.http.Query;
 
 /**
@@ -16,4 +14,12 @@ public interface PetApi {
 
     @GET("/InsertUser")
     void insertUser(@Query("id") String id ,@Query("pass") String pass, Callback<RegisterResponse> callback);
+
+    @GET("/getAd")
+    void getAd(@Query("age") int age,
+               @Query("size") String size,
+               @Query("gender") String gender,
+               @Query("type") String type,
+               @Query("user") String user,
+               Callback<AdResponseList> callback);
 }
