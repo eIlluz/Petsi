@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.eitan.petsi.MainActivity" >
     <item android:id="@+id/action_new_ad"
-        android:icon="@drawable/ic_action_new"
+        android:icon="@drawable/ic_action_plus"
         android:title=""
         android:showAsAction="withText|ifRoom" />
     <item android:id="@+id/action_settings"

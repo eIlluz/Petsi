@@ -2,14 +2,16 @@
 <resources>
 
     <string-array name="actions">
+        <item>Me</item>
         <item>Search</item>
         <item>Favorites</item>
         <item>My pets</item>
     </string-array>
 
     <array name="images">
+        <item>@drawable/ic_action_me</item>
         <item>@drawable/ic_action_search</item>
         <item>@drawable/ic_action_favorite</item>
-        <item>@drawable/ic_action_my_pets</item>
+        <item>@drawable/ic_my_pets</item>
     </array>
 </resources>

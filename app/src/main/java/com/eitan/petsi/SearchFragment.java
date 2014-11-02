@@ -187,7 +187,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 Intent toSearchRes = new Intent(this.getActivity(), PetItemListActivity.class);
 
                 //Fill the intent with the filter data.
-                toSearchRes.putExtra(App.AGE,mAgeSpinner.getSelectedItem().toString());
+//                toSearchRes.putExtra(App.AGE,Integer.parseInt(mAgeSpinner.getSelectedItem().toString()));
                 toSearchRes.putExtra(App.SIZE,mSizeSpinner.getSelectedItem().toString());
                 toSearchRes.putExtra(App.GENDER,mGenderSpinner.getSelectedItem().toString());
                 toSearchRes.putExtra(App.ANIMAL,mAnimalSpinner.getSelectedItem().toString());

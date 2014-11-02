@@ -1,5 +1,7 @@
 package com.eitan.petsi.com.eitan.petsi.services;
 
+import java.util.List;
+
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -21,5 +23,5 @@ public interface PetApi {
                @Query("gender") String gender,
                @Query("type") String type,
                @Query("user") String user,
-               Callback<AdResponseList> callback);
+               Callback<List<AdResponseItem>> callback);
 }

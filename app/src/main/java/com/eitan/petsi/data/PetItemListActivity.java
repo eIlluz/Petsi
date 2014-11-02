@@ -1,19 +1,16 @@
 package com.eitan.petsi.data;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.widget.Toast;
-
-
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
-import com.eitan.petsi.com.eitan.petsi.services.GetPetsByFilter;
-import com.eitan.petsi.com.eitan.petsi.services.GetPetsException;
-import com.eitan.petsi.com.eitan.petsi.services.GetPetsRespond;
-
+import com.eitan.petsi.com.eitan.petsi.services.GetAdsRespond;
+import com.eitan.petsi.com.eitan.petsi.services.GetAdsTask;
 import java.util.ArrayList;
+import java.util.List;
+import retrofit.RetrofitError;
 
 /**
  * An activity representing a list of Pet Items. This activity
@@ -32,7 +29,7 @@ import java.util.ArrayList;
  * to listen for item selections.
  */
 public class PetItemListActivity extends Activity
-        implements PetItemListFragment.Callbacks {
+        implements PetItemListFragment.Callbacks, GetAdsRespond {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -73,7 +70,8 @@ public class PetItemListActivity extends Activity
                 Bundle extras = getIntent().getExtras();
 
                 if (extras != null) {
-                    filterData = new FilterData(extras.getString(App.AGE),
+
+                    filterData = new FilterData(0, //extras.getInt(App.AGE),
                                                 extras.getString(App.GENDER),
                                                 extras.getString(App.ANIMAL),
                                                 extras.getString(App.SIZE));
@@ -84,7 +82,7 @@ public class PetItemListActivity extends Activity
             }
             else {
 
-                filterData = new FilterData(savedInstanceState.getString(App.AGE),
+                filterData = new FilterData(0, //savedInstanceState.getInt(App.AGE),
                                             savedInstanceState.getString(App.GENDER),
                                             savedInstanceState.getString(App.ANIMAL),
                                             savedInstanceState.getString(App.SIZE));
@@ -92,8 +90,11 @@ public class PetItemListActivity extends Activity
             }
         }
 
-        GetPetsTask taskPetList = new GetPetsTask(filterData.age, filterData.gender, filterData.size, filterData.animal);
-        taskPetList.execute((Void) null);
+        GetAdsTask getAdsTask = new GetAdsTask(this,filterData.age,filterData.animal,filterData.gender,filterData.size,null);
+        getAdsTask.getAds();
+
+//        GetPetsTask taskPetList = new GetPetsTask(filterData.age, filterData.gender, filterData.size, filterData.animal);
+//        taskPetList.execute((Void) null);
 
         //petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
         // TODO: If exposing deep links into your app, handle intents here.
@@ -138,7 +139,7 @@ public class PetItemListActivity extends Activity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putString(App.AGE,filterData.age);
+        //outState.putInt(App.AGE,filterData.age);
         outState.putString(App.ANIMAL,filterData.animal);
         outState.putString(App.SIZE,filterData.size);
         outState.putString(App.GENDER,filterData.gender);
@@ -147,16 +148,30 @@ public class PetItemListActivity extends Activity
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onAdsLoaded(List<Pet> ads) {
+        mPetList = (ArrayList<Pet>)ads;
+        App app = (App)getApplication();
+        app.petListProvider.setPetList(mPetList);
+        mPetListFrag.showList();
+    }
+
+    @Override
+    public void onRestCallError(RetrofitError error) {
+
+        Toast.makeText(this.getApplicationContext(),getString(R.string.get_ads_error),Toast.LENGTH_LONG).show();
+    }
+
     private class FilterData{
 
-        public String age;
+        public int age;
         public String gender;
         public String animal;
         public String size;
 
         private FilterData(){}
 
-        private FilterData(String age, String gender, String animal, String size) {
+        private FilterData(int age, String gender, String animal, String size) {
             this.age = age;
             this.gender = gender;
             this.animal = animal;
@@ -164,47 +179,47 @@ public class PetItemListActivity extends Activity
         }
     }
 
-    private class GetPetsTask extends AsyncTask<Void,Void,GetPetsRespond> {
-
-        private String mAge;
-        private String mGender;
-        private String mSize;
-        private String mAnimal;
-
-        private GetPetsTask(String mAge, String mGender, String mSize, String mAnimal) {
-            this.mAge = mAge;
-            this.mGender = mGender;
-            this.mSize = mSize;
-            this.mAnimal = mAnimal;
-        }
-
-        @Override
-        protected GetPetsRespond doInBackground(Void... voids) {
-
-            ArrayList<Pet> mPetsList;
-
-            try {
-                mPetsList = new GetPetsByFilter(mAnimal, mAge, mSize, mGender).GetPets();
-            } catch (GetPetsException e) {
-                e.printStackTrace();
-                return new GetPetsRespond(false, e.getMessage(), null);
-            }
-            return new GetPetsRespond(true, null, mPetsList);
-        }
-
-        @Override
-        protected void onPostExecute(GetPetsRespond getPetsRespond) {
-
-            if (getPetsRespond.isSuccess()) {
-
-                mPetList = getPetsRespond.getPetlist();
-                App app = (App)getApplication();
-                app.petListProvider.setPetList(mPetList);
-                mPetListFrag.showList();
-            } else {
-                Toast.makeText(getApplicationContext(), getPetsRespond.getMessage(), Toast.LENGTH_LONG);
-            }
-        }
-    }
+//    private class GetPetsTask extends AsyncTask<Void,Void,GetPetsRespond> {
+//
+//        private String mAge;
+//        private String mGender;
+//        private String mSize;
+//        private String mAnimal;
+//
+//        private GetPetsTask(String mAge, String mGender, String mSize, String mAnimal) {
+//            this.mAge = mAge;
+//            this.mGender = mGender;
+//            this.mSize = mSize;
+//            this.mAnimal = mAnimal;
+//        }
+//
+//        @Override
+//        protected GetPetsRespond doInBackground(Void... voids) {
+//
+//            ArrayList<Pet> mPetsList;
+//
+//            try {
+//                mPetsList = new GetPetsByFilter(mAnimal, mAge, mSize, mGender).GetPets();
+//            } catch (GetPetsException e) {
+//                e.printStackTrace();
+//                return new GetPetsRespond(false, e.getMessage(), null);
+//            }
+//            return new GetPetsRespond(true, null, mPetsList);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(GetPetsRespond getPetsRespond) {
+//
+//            if (getPetsRespond.isSuccess()) {
+//
+//                mPetList = getPetsRespond.getPetlist();
+//                App app = (App)getApplication();
+//                app.petListProvider.setPetList(mPetList);
+//                mPetListFrag.showList();
+//            } else {
+//                Toast.makeText(getApplicationContext(), getPetsRespond.getMessage(), Toast.LENGTH_LONG);
+//            }
+//        }
+//    }
 
 }

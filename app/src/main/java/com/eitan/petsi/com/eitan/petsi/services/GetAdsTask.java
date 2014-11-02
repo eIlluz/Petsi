@@ -15,7 +15,7 @@ import retrofit.client.Response;
 /**
  * Created by eitan on 01/11/2014.
  */
-public class GetAdsTask implements Callback<AdResponseList> {
+public class GetAdsTask implements Callback<List<AdResponseItem>> {
 
 
     private GetAdsRespond getAdsRespond;
@@ -39,18 +39,19 @@ public class GetAdsTask implements Callback<AdResponseList> {
     }
 
     @Override
-    public void success(AdResponseList adResponseList, Response response) {
+    public void success(List<AdResponseItem> adResponseList, Response response) {
 
         ArrayList<Pet> petsList = new ArrayList<Pet>();
 
-        for (AdResponseItem item:adResponseList.getAdResponseItems()){
+        if (adResponseList != null && adResponseList != null) {
+            for (AdResponseItem item : adResponseList) {
 
-            petsList.add(new Pet(new AdData(Integer.toString(item.getId()),item.getUser(),item.getCreatedOn(),item.getCreatedOn(),"open",7),
-                    new OwnerDetails(item.getUser(),"05050000","Tel Aviv",item.getUser()),
-                    new PetDetails(item.getPetName(),item.getGender(),(int)item.getAge(),item.getType(),item.getDescription(),item.getStory(),
-                            item.getPhotoURL(),item.getSize())));
+                petsList.add(new Pet(new AdData(Integer.toString(item.getId()), item.getUser(), item.getCreatedOn(), item.getCreatedOn(), "open", 7),
+                        new OwnerDetails(item.getUser(), "05050000", "Tel Aviv", item.getUser()),
+                        new PetDetails(item.getPetName(), item.getGender(), (int) item.getAge(), item.getType(), item.getDescription(), item.getStory(),
+                                item.getPhotoURL(), item.getSize())));
+            }
         }
-
         getAdsRespond.onAdsLoaded(petsList);
     }
 
