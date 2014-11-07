@@ -13,9 +13,13 @@ import android.widget.Toast;
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 import com.eitan.petsi.aws.FileDownloadCallBack;
+import com.eitan.petsi.com.eitan.petsi.services.*;
+import com.eitan.petsi.com.eitan.petsi.services.UserDetails;
 import com.eitan.petsi.views.FavImage;
 import com.squareup.picasso.Picasso;
 import java.io.File;
+
+import retrofit.RetrofitError;
 
 /**
  * A fragment representing a single PetItem detail screen.
@@ -23,7 +27,7 @@ import java.io.File;
  * in two-pane mode (on tablets) or a {@link PetItemDetailActivity}
  * on handsets.
  */
-public class PetItemDetailFragment extends Fragment implements View.OnClickListener, FileDownloadCallBack {
+public class PetItemDetailFragment extends Fragment implements View.OnClickListener, UserDetailsRespond {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -43,8 +47,10 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     private TextView petAge;
 
     private TextView petStory;
+
     private TextView ownerName;
     private TextView ownerAddress;
+    private TextView ownerPhone;
 
     private FavImage favButton;
     private TextView likesTex;
@@ -90,6 +96,7 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
         ownerAddress = (TextView) rootView.findViewById(R.id.det_owner_address);
         ownerName = (TextView) rootView.findViewById(R.id.det_owner_name);
+        ownerPhone = (TextView) rootView.findViewById(R.id.det_owner_phone);
 
         likesTex = (TextView)rootView.findViewById(R.id.det_likes_txt);
 
@@ -110,9 +117,6 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
             petStory.setText(pet.getPetDetails().getStory());
 
-            ownerName.setText(pet.getOwnerDetails().getName());
-            ownerAddress.setText(pet.getOwnerDetails().getAddress());
-
             likesTex.setText(String.valueOf(pet.getAdData().getNumOfLikes()));
 
             App app = (App)getActivity().getApplication();
@@ -122,6 +126,10 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
                     .error(R.drawable.ic_launcher)
                     .centerCrop().fit()
                     .into(petImage);
+
+            //Get owners data
+            GetUserDetailsTask getUserDetailsTask = new GetUserDetailsTask(pet.getOwnerDetails().getEmail(),this);
+            getUserDetailsTask.getUserDetails();
         }
 
         return rootView;
@@ -140,7 +148,6 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
             case (R.id.det_fav_btn):
                 break;
         }
-
     }
 
     private void sendMail(){
@@ -161,12 +168,22 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void onFileDowloaded(File file) {
+    public void onGetDetailsSuccess(UserDetails userDetails) {
+        pet.setOwnerDetails(new OwnerDetails(userDetails.getName(),userDetails.getPhoneNumber(),userDetails.getAddress(),userDetails.getMailAddress()));
 
-        Picasso.with(getActivity().getApplicationContext()).load(file)
-                .placeholder(R.drawable.ic_dog)
-                .error(R.drawable.ic_launcher)
-                .centerCrop().fit()
-                .into(petImage);
+        System.out.println("@@@@@@@@@@@@ Owner data came back @@@@@@@@@@@@@@@@@");
+        System.out.println("name: " + pet.getOwnerDetails().getName());
+        ownerName.setText(pet.getOwnerDetails().getName());
+        ownerAddress.setText(pet.getOwnerDetails().getAddress());
+        ownerPhone.setText((pet.getOwnerDetails().getTel()));
     }
+
+    @Override
+    public void onGetDetailsFail() {}
+
+    @Override
+    public void onRestCallError(RetrofitError error) {
+        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_LONG);
+    }
+
 }

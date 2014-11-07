@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
+import com.eitan.petsi.data.PetItemListActivity;
+
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, SearchFragment.OnFragmentSearchInteractionListener
          {
@@ -27,6 +29,7 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
 
+    private App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +44,27 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        app = (App)getApplication();
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, getCurrentFragment(position + 1))
-                .commit();
-    }
 
+        if (position == 3) {
+
+            Intent toMyPets = new Intent(this, PetItemListActivity.class);
+            toMyPets.putExtra(App.USER,app.getCurrentUser());
+
+            startActivity(toMyPets);
+        } else {
+            // update the main content by replacing fragments
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, getCurrentFragment(position + 1))
+                    .commit();
+        }
+    }
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -151,7 +164,7 @@ public class MainActivity extends Activity
 
     private Fragment getCurrentFragment(int sectionNumber)
     {
-        Toast.makeText(this,Integer.toString(sectionNumber),Toast.LENGTH_LONG).show();
+
         SearchFragment fragment = new SearchFragment();
 
         return fragment;

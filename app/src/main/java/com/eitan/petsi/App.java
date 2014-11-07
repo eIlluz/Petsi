@@ -21,6 +21,7 @@ public class App extends Application {
     public static final String GENDER = "Gender";
     public static final String FROM_AGE = "FromAge";
     public static final String TO_AGE = "ToAge";
+    public static final String USER = "user";
 
     public static final String LOGIN_PARAM = "login_param";
     public static final int LOGIN = 1;

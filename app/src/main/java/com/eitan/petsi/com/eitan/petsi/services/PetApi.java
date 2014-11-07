@@ -34,5 +34,5 @@ public interface PetApi {
 
     //Get user details
     @GET("/getUserDetails")
-    void getUserDetails(@Query("id") String id,Callback<UserDetails> callback);
+    void getUserDetails(@Query("id") String id, Callback<UserDetails> callback);
 }

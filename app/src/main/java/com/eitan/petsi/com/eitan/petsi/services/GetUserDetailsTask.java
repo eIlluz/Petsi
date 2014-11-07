@@ -47,6 +47,7 @@ public class GetUserDetailsTask implements Callback<UserDetails> {
 
     @Override
     public void failure(RetrofitError error) {
+
         userDetailsRespond.onRestCallError(error);
     }
 }
