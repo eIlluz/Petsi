@@ -105,8 +105,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
                 Toast.makeText(getActivity().getApplicationContext(),"NULL",Toast.LENGTH_LONG).show();
 
             petAge.setText(Integer.toString(pet.getPetDetails().getAge()));
-            petSize.setText(pet.getPetDetails().getSize());
-            petGender.setText(pet.getPetDetails().getGender());
+            petSize.setText(pet.getPetDetails().getSize().toLowerCase());
+            petGender.setText(pet.getPetDetails().getGender().toLowerCase());
 
             petStory.setText(pet.getPetDetails().getStory());
 

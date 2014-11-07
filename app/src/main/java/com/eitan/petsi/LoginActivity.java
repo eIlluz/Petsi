@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eitan.petsi.com.eitan.petsi.services.AuthResponse;
 import com.eitan.petsi.com.eitan.petsi.services.LoginResponse;
 import com.eitan.petsi.com.eitan.petsi.services.RegisterResponse;
 import com.eitan.petsi.com.eitan.petsi.services.UserLoginTask;
@@ -51,6 +52,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     private UserLoginTask mAuthTask = null;
     private UserRegisterTask mRegisterTask = null;
 
+    private App app;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -65,6 +68,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
 
         //Hide action bar
         getActionBar().hide();
+
+        //Save application reference.
+        app = (App)getApplication();
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -323,8 +329,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     }
 
     @Override
-    public void onLoginSuccess(LoginResponse loginResponse) {
+    public void onLoginSuccess(AuthResponse AuthResponse) {
         onLoginTryEnd();
+
+        //Update current user
+        app.setCurrentUser(mEmailView.getText().toString());
 
         startActivity(new Intent(LoginActivity.this,MainActivity.class));
         finish();
@@ -341,6 +350,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     @Override
     public void onRegisterSuccess(RegisterResponse registerResponse) {
         onRegisterTryEnd();
+
+        //Update current user
+        app.setCurrentUser(mEmailView.getText().toString());
 
         startActivity(new Intent(LoginActivity.this,MainActivity.class));
         finish();

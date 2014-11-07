@@ -7,7 +7,7 @@ import retrofit.RetrofitError;
  */
 public interface UserLoginRespond {
 
-    public void onLoginSuccess(LoginResponse loginResponse);
+    public void onLoginSuccess(AuthResponse authResponse);
 
     public void onLoginFailed();
 

@@ -19,6 +19,8 @@ public class App extends Application {
     public static final String SIZE = "Size";
     public static final String ANIMAL = "Animal";
     public static final String GENDER = "Gender";
+    public static final String FROM_AGE = "FromAge";
+    public static final String TO_AGE = "ToAge";
 
     public static final String LOGIN_PARAM = "login_param";
     public static final int LOGIN = 1;
@@ -29,6 +31,8 @@ public class App extends Application {
     private static Context context;
 
     private S3Provider s3Provider;
+
+    private String currentUser;
 
     @Override
     public void onCreate() {
@@ -48,6 +52,14 @@ public class App extends Application {
 
     public void uploadImageToS3(String fileName,File file, FileUploadCallBack fileUploadCallBack){
         s3Provider.uploadImage(fileName,file,fileUploadCallBack);
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        this.currentUser = currentUser;
     }
 }
 

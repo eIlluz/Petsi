@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.edmodo.rangebar.RangeBar;
 import com.eitan.petsi.data.PetItemListActivity;
 
 
@@ -25,11 +27,13 @@ import com.eitan.petsi.data.PetItemListActivity;
  * create an instance of this fragment.
  *
  */
-public class SearchFragment extends Fragment implements View.OnClickListener{
+public class SearchFragment extends Fragment implements View.OnClickListener, RangeBar.OnRangeBarChangeListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final int MAX_AGE = 20;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -38,7 +42,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private Spinner mAnimalSpinner;
     private Spinner mGenderSpinner;
     private Spinner mSizeSpinner;
-    private Spinner mAgeSpinner;
+
+    private RangeBar mAgeBar;
+
+    private TextView mAgeRangeText;
 
     private OnFragmentSearchInteractionListener mListener;
 
@@ -81,9 +88,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         Button btSearch = (Button)frag.findViewById(R.id.search_button);
         btSearch.setOnClickListener(this);
 
+        mAgeRangeText = (TextView)frag.findViewById(R.id.age_range_text);
+        mAgeRangeText.setText(getRangeText(0,MAX_AGE));
+
+        mAgeBar = (RangeBar)frag.findViewById(R.id.age_range);
+        mAgeBar.setOnRangeBarChangeListener(this);
+        mAgeBar.setTickCount(MAX_AGE);
+
         setAnimalAdapter(frag);
         setGenderAdapter(frag);
-        setAgeAdapter(frag);
         setSizeAdapter(frag);
         return frag;
     }
@@ -136,21 +149,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         mSizeSpinner.setAdapter(sizeAdapter);
     }
 
-    //Set the animal types values set.
-    private void setAgeAdapter(View frag)
-    {
-        mAgeSpinner = (Spinner)frag.findViewById(R.id.age_spinner);
-
-//      Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> ageAdapter =
-                ArrayAdapter.createFromResource(getActivity().getBaseContext(), R.array.age_array,android.R.layout.simple_spinner_dropdown_item);
-
-//      Specify the layout to use when the list of choices appears
-        ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-//      Apply the adapter to the spinner
-        mAgeSpinner.setAdapter(ageAdapter);
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -187,14 +185,37 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 Intent toSearchRes = new Intent(this.getActivity(), PetItemListActivity.class);
 
                 //Fill the intent with the filter data.
-//                toSearchRes.putExtra(App.AGE,Integer.parseInt(mAgeSpinner.getSelectedItem().toString()));
-                toSearchRes.putExtra(App.SIZE,mSizeSpinner.getSelectedItem().toString());
-                toSearchRes.putExtra(App.GENDER,mGenderSpinner.getSelectedItem().toString());
-                toSearchRes.putExtra(App.ANIMAL,mAnimalSpinner.getSelectedItem().toString());
+                if (mSizeSpinner.getSelectedItemPosition() != 0)
+                    toSearchRes.putExtra(App.SIZE,mSizeSpinner.getSelectedItem().toString());
+                else
+                    toSearchRes.putExtra(App.SIZE,"");
+
+                if (mGenderSpinner.getSelectedItemPosition() != 0)
+                    toSearchRes.putExtra(App.GENDER,mGenderSpinner.getSelectedItem().toString());
+                else
+                    toSearchRes.putExtra(App.GENDER,"");
+
+                if (mAnimalSpinner.getSelectedItemPosition() != 0)
+                    toSearchRes.putExtra(App.ANIMAL,mAnimalSpinner.getSelectedItem().toString());
+                else
+                    toSearchRes.putExtra(App.ANIMAL,"");
+
+                toSearchRes.putExtra(App.FROM_AGE, mAgeBar.getLeftIndex());
+                toSearchRes.putExtra(App.TO_AGE,mAgeBar.getRightIndex());
+
                 //Go to results activity.
                 startActivity(toSearchRes);
         }
 
+    }
+
+    private String getRangeText(int from,int to){
+        return (Integer.toString(from) + "   -   " + Integer.toString(to));
+    }
+    @Override
+    public void onIndexChangeListener(RangeBar rangeBar, int min, int max) {
+
+        mAgeRangeText.setText(getRangeText(min,max));
     }
 
     /**

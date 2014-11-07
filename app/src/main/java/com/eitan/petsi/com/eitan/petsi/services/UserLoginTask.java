@@ -7,7 +7,7 @@ import retrofit.client.Response;
 /**
  * Created by eitan on 24/10/2014.
  */
-public class UserLoginTask implements Callback<LoginResponse>{
+public class UserLoginTask implements Callback<AuthResponse>{
 
     private UserLoginRespond userLoginRespond;
     private String userName;
@@ -20,17 +20,17 @@ public class UserLoginTask implements Callback<LoginResponse>{
     }
 
     public void getLogin(){
-        PetsiRestClient.get().getUser(userName,password,this);
+        PetsiRestClient.get().authUser(userName,password,this);
     }
 
 
     @Override
-    public void success(LoginResponse loginResponse, Response response) {
+    public void success(AuthResponse authResponse, Response response) {
 
-        if (loginResponse == null){
+        if (!authResponse.isSuccess()){
             userLoginRespond.onLoginFailed();
         }else{
-            userLoginRespond.onLoginSuccess(loginResponse);
+            userLoginRespond.onLoginSuccess(authResponse);
         }
     }
 

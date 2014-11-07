@@ -38,4 +38,5 @@ dependencies {
     //compile 'com.amazonaws:aws-java-sdk:1.8.11'
     compile files('libs/aws-android-sdk-2.1.4-core.jar')
     compile files('libs/aws-android-sdk-2.1.4-s3.jar')
+    compile 'com.edmodo:rangebar:1.0.0'
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, SearchFragment.OnFragmentSearchInteractionListener
@@ -150,6 +151,7 @@ public class MainActivity extends Activity
 
     private Fragment getCurrentFragment(int sectionNumber)
     {
+        Toast.makeText(this,Integer.toString(sectionNumber),Toast.LENGTH_LONG).show();
         SearchFragment fragment = new SearchFragment();
 
         return fragment;

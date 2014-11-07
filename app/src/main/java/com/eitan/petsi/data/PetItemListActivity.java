@@ -71,10 +71,12 @@ public class PetItemListActivity extends Activity
 
                 if (extras != null) {
 
-                    filterData = new FilterData(0, //extras.getInt(App.AGE),
+                    filterData = new FilterData(
                                                 extras.getString(App.GENDER),
                                                 extras.getString(App.ANIMAL),
-                                                extras.getString(App.SIZE));
+                                                extras.getString(App.SIZE),
+                                                extras.getInt(App.FROM_AGE),
+                                                extras.getInt(App.TO_AGE));
                 }else{
                     filterData = new FilterData();
                 }
@@ -82,22 +84,22 @@ public class PetItemListActivity extends Activity
             }
             else {
 
-                filterData = new FilterData(0, //savedInstanceState.getInt(App.AGE),
-                                            savedInstanceState.getString(App.GENDER),
+                filterData = new FilterData(savedInstanceState.getString(App.GENDER),
                                             savedInstanceState.getString(App.ANIMAL),
-                                            savedInstanceState.getString(App.SIZE));
+                                            savedInstanceState.getString(App.SIZE),
+                                            savedInstanceState.getInt(App.FROM_AGE),
+                                            savedInstanceState.getInt(App.TO_AGE));
 
             }
         }
 
-        GetAdsTask getAdsTask = new GetAdsTask(this,filterData.age,filterData.animal,filterData.gender,filterData.size,null);
+        GetAdsTask getAdsTask = new GetAdsTask(this,filterData.fromAge,filterData.toAge,filterData.animal,filterData.gender,filterData.size,null);
         getAdsTask.getAds();
 
 //        GetPetsTask taskPetList = new GetPetsTask(filterData.age, filterData.gender, filterData.size, filterData.animal);
 //        taskPetList.execute((Void) null);
 
         //petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**
@@ -120,8 +122,6 @@ public class PetItemListActivity extends Activity
 
         } else {
 
-            Toast.makeText(this.getApplicationContext(), "Fragment pressed", Toast.LENGTH_LONG);
-
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, PetItemDetailActivity.class);
@@ -133,16 +133,16 @@ public class PetItemListActivity extends Activity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Toast.makeText(getApplicationContext(),"Restore!!",Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        //outState.putInt(App.AGE,filterData.age);
         outState.putString(App.ANIMAL,filterData.animal);
         outState.putString(App.SIZE,filterData.size);
         outState.putString(App.GENDER,filterData.gender);
+        outState.putInt(App.FROM_AGE,filterData.fromAge);
+        outState.putInt(App.TO_AGE,filterData.toAge);
 
         Toast.makeText(getApplicationContext(),"Instance saved",Toast.LENGTH_LONG).show();
         super.onSaveInstanceState(outState);
@@ -164,18 +164,20 @@ public class PetItemListActivity extends Activity
 
     private class FilterData{
 
-        public int age;
         public String gender;
         public String animal;
         public String size;
+        public int toAge;
+        public int fromAge;
 
         private FilterData(){}
 
-        private FilterData(int age, String gender, String animal, String size) {
-            this.age = age;
-            this.gender = gender;
-            this.animal = animal;
-            this.size = size;
+        private FilterData(String gender, String animal, String size, int fromAge, int toAge) {
+            this.gender = gender.toUpperCase();
+            this.animal = animal.toUpperCase();
+            this.size = size.toUpperCase();
+            this.toAge = toAge;
+            this.fromAge = fromAge;
         }
     }
 
