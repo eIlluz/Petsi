@@ -32,7 +32,8 @@ import retrofit.RetrofitError;
  * on handsets.
  */
 public class PetItemDetailFragment extends Fragment implements View.OnClickListener, UserDetailsRespond,
-                                                               DeleteAdListener, GetLikesListener {
+                                                               DeleteAdListener, GetLikesListener,
+                                                               AdLikeListener{
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -60,6 +61,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
     private FavImage favButton;
     private TextView likesTex;
+
+    private App app;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -76,7 +79,7 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
 
-            App app = (App)getActivity().getApplication();
+            app = (App)getActivity().getApplication();
             pet = app.petListProvider.getPetByAdID(getArguments().getString(ARG_ITEM_ID));
         }
     }
@@ -173,8 +176,15 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
                 callOwner();
                 break;
             case (R.id.det_fav_btn):
+                if (favButton.getOnState())
+                    adLike();
                 break;
         }
+    }
+
+    private void adLike(){
+        AdLikeTask adLikeTask = new AdLikeTask(this,app.getCurrentUser(),pet.getAdData().getAdID());
+        adLikeTask.adLike();
     }
 
     private void sendMail(){
@@ -198,7 +208,6 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     public void onGetDetailsSuccess(UserDetails userDetails) {
         pet.setOwnerDetails(new OwnerDetails(userDetails.getName(),userDetails.getPhoneNum(),userDetails.getAddress(),userDetails.getMailAddress()));
 
-        System.out.println("@@@@@@@@@@@@ Owner data came back @@@@@@@@@@@@@@@@@");
         System.out.println("name: " + pet.getOwnerDetails().getName());
         ownerName.setText(pet.getOwnerDetails().getName());
         ownerAddress.setText(pet.getOwnerDetails().getAddress());
@@ -223,8 +232,25 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     @Override
     public void onGetLikesSuccess(List<FavRespond> likes) {
 
-        if (likes != null)
+        if (likes != null) {
             likesTex.setText(Integer.toString(likes.size()));
+
+            for (FavRespond favRespond: likes){
+                if (favRespond.getUser().equals(app.getCurrentUser())){
+                    favButton.switchState();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAdLikeSuccess() {
+        likesTex.setText(Integer.toString(Integer.parseInt(likesTex.getText().toString()) + 1));
+    }
+
+    @Override
+    public void onAdLikeFailed() {
+
     }
 
     @Override

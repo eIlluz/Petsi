@@ -46,4 +46,7 @@ public interface PetApi {
 
     @GET("/getLikes")
     void getLikes(@QueryMap Map<String, String> params,Callback<List<FavRespond>> callback);
+
+    @GET("/adLike")
+    void adLike(@Query("adID") String adID, @Query("user") String user,Callback<PostActionResponse> callback);
 }

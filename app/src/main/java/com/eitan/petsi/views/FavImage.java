@@ -54,6 +54,10 @@ public class FavImage extends ImageButton {
         }
     }
 
+    public Boolean getOnState() {
+        return onState;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 

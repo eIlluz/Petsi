@@ -7,14 +7,21 @@ import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
 import com.eitan.petsi.aws.FileDownloadCallBack;
 import com.eitan.petsi.aws.FileUploadCallBack;
 import com.eitan.petsi.aws.S3Provider;
+import com.eitan.petsi.com.eitan.petsi.services.FavRespond;
+import com.eitan.petsi.com.eitan.petsi.services.GetLikesListener;
+import com.eitan.petsi.com.eitan.petsi.services.GetLikesTask;
 import com.eitan.petsi.data.PetListProvider;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit.RetrofitError;
 
 /**
  * Created by eitan on 26/07/2014.
  */
-public class App extends Application {
+public class App extends Application implements GetLikesListener{
 
     public static final String AGE = "Age";
     public static final String SIZE = "Size";
@@ -35,6 +42,8 @@ public class App extends Application {
     private S3Provider s3Provider;
 
     private String currentUser;
+
+    private List<FavRespond> userFavs = new ArrayList<FavRespond>();
 
     @Override
     public void onCreate() {
@@ -65,7 +74,36 @@ public class App extends Application {
     }
 
     public void setCurrentUser(String currentUser) {
+
         this.currentUser = currentUser;
+
+        GetLikesTask getLikesTask = new GetLikesTask(this);
+        getLikesTask.setUser(currentUser);
+        getLikesTask.getLikes();
+    }
+
+    public List<FavRespond> getUserFavs() {
+        return userFavs;
+    }
+
+    public boolean isOnFavList(String id){
+
+        for (FavRespond favRespond: userFavs){
+            if (favRespond.getAdID().equals(id))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onGetLikesSuccess(List<FavRespond> likes) {
+        userFavs = likes;
+    }
+
+    @Override
+    public void onRestCallError(RetrofitError error) {
+
     }
 }
 

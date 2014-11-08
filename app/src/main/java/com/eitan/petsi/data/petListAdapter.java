@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
 import com.eitan.petsi.aws.FileDownloadCallBack;
+import com.eitan.petsi.views.FavImage;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,12 +29,14 @@ public class petListAdapter extends ArrayAdapter<Pet>
     Context mContext;
     ArrayList<Pet> mPetList;
     LayoutInflater mInflate;
+    App app;
 
-    public petListAdapter(Context context, ArrayList<Pet> objects) {
+    public petListAdapter(Context context, ArrayList<Pet> objects,App app) {
         super(context, R.layout.pet_item, objects);
         mContext = context;
         mPetList = objects;
         mInflate = (LayoutInflater)mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        this.app = app;
     }
 
     @Override
@@ -48,6 +51,7 @@ public class petListAdapter extends ArrayAdapter<Pet>
             holder.petName = (TextView)convertView.findViewById(R.id.petname);
             holder.petOtherInfo = (TextView)convertView.findViewById(R.id.petDetails);
             holder.petImage = (ImageView)convertView.findViewById(R.id.petimage);
+            holder.favImage = (FavImage)convertView.findViewById(R.id.det_fav_btn);
             convertView.setTag(holder);
         } else
         {
@@ -58,6 +62,7 @@ public class petListAdapter extends ArrayAdapter<Pet>
         holder.petOtherInfo.setText(mPetList.get(position).getPetDetails().getGender() + ", " +
                 mPetList.get(position).getPetDetails().getAge() + ", " +
                 mPetList.get(position).getPetDetails().getSize());
+        holder.favImage.turnOnOff(app.isOnFavList(mPetList.get(position).getAdData().getAdID()));
 
         Activity activity = (Activity)mContext;
         App app = (App)activity.getApplication();
@@ -78,26 +83,7 @@ public class petListAdapter extends ArrayAdapter<Pet>
         public TextView petName;
         public ImageView petImage;
         public TextView petOtherInfo;
-
-    }
-
-    private class FileDownloadCallBackPicasso implements FileDownloadCallBack{
-
-        ViewHolder holder;
-
-        private FileDownloadCallBackPicasso(ViewHolder holder) {
-            this.holder = holder;
-        }
-
-        @Override
-        public void onFileDowloaded(File file) {
-
-            Picasso.with(mContext).load(file)
-                    .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
-                    .placeholder(R.drawable.ic_dog)
-                    .error(R.drawable.ic_launcher)
-                    .into(holder.petImage);
-        }
+        public FavImage favImage;
     }
 
 }

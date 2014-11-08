@@ -93,7 +93,7 @@ public class PetItemListFragment extends ListFragment {
 
         App application = (App)getActivity().getApplication();
         mPetProvider = application.petListProvider;
-        setListAdapter(new petListAdapter(getActivity(), mPetProvider.getPetArray()));
+        setListAdapter(new petListAdapter(getActivity(), mPetProvider.getPetArray(),application));
         mPetList = mPetProvider.getPetArray();
     }
 
