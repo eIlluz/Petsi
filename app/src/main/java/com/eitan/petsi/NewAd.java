@@ -9,7 +9,10 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
@@ -34,6 +37,14 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
     private File pictureFile = null;
     private FButton saveButton;
 
+    private EditText petNameEditText;
+    private EditText petAgeEditText;
+    private EditText petDescEditText;
+    private EditText petStoryEditText;
+    private Spinner sizeSpinner;
+    private Spinner typeSpinner;
+    private Spinner genderSpinner;
+
     private App app;
 
     @Override
@@ -51,8 +62,65 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
 
         saveButton = (FButton)findViewById(R.id.save_new_ad);
         saveButton.setOnClickListener(this);
+
+        petNameEditText = (EditText)findViewById(R.id.new_ad_pet_name);
+        petAgeEditText = (EditText)findViewById(R.id.new_ad_pet_age);
+        petDescEditText = (EditText)findViewById(R.id.new_ad_pet_desc);
+        petStoryEditText = (EditText)findViewById(R.id.new_ad_pet_story);
+
+        setAnimalAdapter();
+        setSizeAdapter();
+        setGenderAdapter();
+
     }
 
+    //Set the animal types values set.
+    private void setAnimalAdapter()
+    {
+        typeSpinner = (Spinner)findViewById(R.id.new_ad_animal_spinner);
+
+        //Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> animalAdapter =
+                ArrayAdapter.createFromResource(getBaseContext(), R.array.new_ad_types_array,android.R.layout.simple_spinner_dropdown_item);
+
+        //Specify the layout to use when the list of choices appears
+        animalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Apply the adapter to the spinner
+        typeSpinner.setAdapter(animalAdapter);
+    }
+
+    //Set the animal types values set.
+    private void setSizeAdapter()
+    {
+        sizeSpinner = (Spinner)findViewById(R.id.new_ad_size_spinner);
+
+        //Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> animalAdapter =
+                ArrayAdapter.createFromResource(getBaseContext(), R.array.new_ad_sizes_array,android.R.layout.simple_spinner_dropdown_item);
+
+        //Specify the layout to use when the list of choices appears
+        animalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Apply the adapter to the spinner
+        sizeSpinner.setAdapter(animalAdapter);
+    }
+
+    //Set the animal types values set.
+    private void setGenderAdapter()
+    {
+        genderSpinner = (Spinner)findViewById(R.id.new_ad_gender_spinner);
+
+        //Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> animalAdapter =
+                ArrayAdapter.createFromResource(getBaseContext(), R.array.new_ad_gender_array,android.R.layout.simple_spinner_dropdown_item);
+
+        //Specify the layout to use when the list of choices appears
+        animalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Apply the adapter to the spinner
+        genderSpinner.setAdapter(animalAdapter);
+    }
 
     private void startCamera(){
 
@@ -163,4 +231,5 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
     public void onUploadToS3Completed(UploadResult uploadResult) {
         Toast.makeText(this,uploadResult.getKey(),Toast.LENGTH_LONG).show();
     }
+
 }
