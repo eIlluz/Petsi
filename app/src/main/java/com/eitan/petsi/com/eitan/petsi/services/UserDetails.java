@@ -1,7 +1,5 @@
 package com.eitan.petsi.com.eitan.petsi.services;
 
-import java.util.Date;
-
 /**
  * Created by eitan on 07/11/2014.
  */
@@ -10,14 +8,14 @@ public class UserDetails {
     private String lastName;
     private String mailAddress;
     private String address;
-    private String phoneNumber;
+    private String phoneNum;
 
-    public UserDetails(String name, String lastName, String mailAddress, String address, String phoneNumber) {
+    public UserDetails(String name, String lastName, String mailAddress, String address, String phoneNum) {
         this.name = name;
         this.lastName = lastName;
         this.mailAddress = mailAddress;
         this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.phoneNum = phoneNum;
     }
 
     public String getName() {
@@ -52,11 +50,11 @@ public class UserDetails {
         this.address = address;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhoneNum() {
+        return phoneNum;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 }

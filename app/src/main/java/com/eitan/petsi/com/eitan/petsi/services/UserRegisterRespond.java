@@ -7,7 +7,7 @@ import retrofit.RetrofitError;
  */
 public interface UserRegisterRespond {
 
-    public void onRegisterSuccess(RegisterResponse registerResponse);
+    public void onRegisterSuccess(PostActionResponse PostActionResponse);
 
     public void onRegisterFailed();
 

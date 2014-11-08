@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
-import retrofit.http.FieldMap;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
@@ -16,16 +15,12 @@ public interface PetApi {
 
     //Insert new user
     @GET("/InsertUser")
-    void insertUser(@Query("id") String id ,@Query("pass") String pass, Callback<RegisterResponse> callback);
+    void insertUser(@Query("id") String id ,@Query("pass") String pass, Callback<PostActionResponse> callback);
 
 
     //Query ads
     @GET("/getAd")
     void getAd(@QueryMap Map<String, String> params,
-               //@Query("size") String size,
-               //@Query("gender") String gender,
-               //@Query("type") String type,
-               //@Query("user") String user,
                Callback<List<AdResponseItem>> callback);
 
     //Authenticate user
@@ -35,4 +30,7 @@ public interface PetApi {
     //Get user details
     @GET("/getUserDetails")
     void getUserDetails(@Query("id") String id, Callback<UserDetails> callback);
+
+    @GET("/updateUser")
+    void updateUser(@QueryMap Map<String, String> params,Callback<PostActionResponse> insertRespond);
 }

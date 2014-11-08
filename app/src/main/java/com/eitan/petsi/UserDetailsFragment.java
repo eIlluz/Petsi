@@ -7,80 +7,81 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.eitan.petsi.com.eitan.petsi.services.GetUserDetailsTask;
+import com.eitan.petsi.com.eitan.petsi.services.PostActionResponse;
+import com.eitan.petsi.com.eitan.petsi.services.UpdateUserListener;
+import com.eitan.petsi.com.eitan.petsi.services.UpdateUserTask;
+import com.eitan.petsi.com.eitan.petsi.services.UserDetails;
+import com.eitan.petsi.com.eitan.petsi.services.UserDetailsRespond;
+
+import info.hoang8f.widget.FButton;
+import retrofit.RetrofitError;
 
 
+public class UserDetailsFragment extends Fragment implements View.OnClickListener, UpdateUserListener,UserDetailsRespond{
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserDetailsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
-public class UserDetailsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private OnUserDetailsFragmentListener mListener;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private EditText firstNameEditText;
+    private EditText lastNameEditText;
+    private EditText addressEditText;
+    private EditText phoneEditText;
 
-    private OnFragmentInteractionListener mListener;
+    private App app;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserDetailsFragment newInstance(String param1, String param2) {
-        UserDetailsFragment fragment = new UserDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private FButton saveButton;
+
     public UserDetailsFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
 
-        }
+        app = (App)getActivity().getApplication();
+        GetUserDetailsTask getUserDetailsTask = new GetUserDetailsTask(app.getCurrentUser(),this);
+        getUserDetailsTask.getUserDetails();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_details, container, false);
+
+        View frag = inflater.inflate(R.layout.fragment_user_details, container, false);
+
+        firstNameEditText = (EditText)frag.findViewById(R.id.user_details_first_name);
+        lastNameEditText = (EditText)frag.findViewById(R.id.user_details_last_name);
+        addressEditText = (EditText) frag.findViewById(R.id.user_details_address);
+        phoneEditText = (EditText)frag.findViewById(R.id.user_details_phone_number);
+
+        saveButton = (FButton)frag.findViewById(R.id.save_user_details);
+        saveButton.setOnClickListener(this);
+
+        return frag;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    public void onSave() {
+
+        UpdateUserTask updateUserTask = new UpdateUserTask(this,app.getCurrentUser(),
+                                                           firstNameEditText.getText().toString(),
+                                                           lastNameEditText.getText().toString(),
+                                                           phoneEditText.getText().toString(),
+                                                           addressEditText.getText().toString());
+
+        updateUserTask.updateUser();
+
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnUserDetailsFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -93,19 +94,56 @@ public class UserDetailsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.save_user_details){
+            onSave();
+        }
+    }
+
+    @Override
+    public void onUpdateSuccess(PostActionResponse PostActionResponse) {
+
+        Toast.makeText(getActivity(),getString(R.string.user_update_successfully),Toast.LENGTH_LONG).show();
+
+        if (mListener != null) {
+            mListener.onSave();
+        }
+    }
+
+    @Override
+    public void onUpdateFailed(PostActionResponse PostActionResponse) {
+
+        Toast.makeText(getActivity(),getString(R.string.user_update_failed),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGetDetailsSuccess(UserDetails userDetails) {
+
+        firstNameEditText.setText(userDetails.getName());
+        lastNameEditText.setText(userDetails.getLastName());
+        phoneEditText.setText(userDetails.getPhoneNum());
+        addressEditText.setText(userDetails.getAddress());
+    }
+
+    @Override
+    public void onGetDetailsFail() {
+
+    }
+
+    @Override
+    public void onRestCallError(RetrofitError error) {
+        Toast.makeText(getActivity(),getString(R.string.user_update_failed),Toast.LENGTH_LONG).show();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public interface OnUserDetailsFragmentListener {
+        public void onSave();
     }
 
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_fragment_user_details">My details</string>
+    <string name="user_details_phone_hint">phone number</string>
+    <string name="user_details_first_name_hint">first name</string>
+    <string name="user_details_last_name_hint">last name</string>
+    <string name="user_details_address_hint">address</string>
+
+    <string name="user_update_successfully">User details updated successfully</string>
+    <string name="user_update_failed">Error occurred while updating user details</string>
+</resources>

@@ -77,7 +77,7 @@ public class PetItemListActivity extends Activity
                                                 extras.getString(App.SIZE),
                                                 extras.getInt(App.FROM_AGE),
                                                 extras.getInt(App.TO_AGE),
-                                                extras.getString(App.SIZE));
+                                                extras.getString(App.USER));
                 }else{
                     filterData = new FilterData();
                 }
@@ -90,12 +90,12 @@ public class PetItemListActivity extends Activity
                                             savedInstanceState.getString(App.SIZE),
                                             savedInstanceState.getInt(App.FROM_AGE),
                                             savedInstanceState.getInt(App.TO_AGE),
-                                            savedInstanceState.getString(App.SIZE));
+                                            savedInstanceState.getString(App.USER));
 
             }
         }
 
-        GetAdsTask getAdsTask = new GetAdsTask(this,filterData.fromAge,filterData.toAge,filterData.animal,filterData.gender,filterData.size,null);
+        GetAdsTask getAdsTask = new GetAdsTask(this,filterData.fromAge,filterData.toAge,filterData.animal,filterData.gender,filterData.size,filterData.user);
         getAdsTask.getAds();
 
 //        GetPetsTask taskPetList = new GetPetsTask(filterData.age, filterData.gender, filterData.size, filterData.animal);
@@ -147,7 +147,6 @@ public class PetItemListActivity extends Activity
         outState.putInt(App.TO_AGE,filterData.toAge);
         outState.putString(App.USER,filterData.user);
 
-        Toast.makeText(getApplicationContext(),"Instance saved",Toast.LENGTH_LONG).show();
         super.onSaveInstanceState(outState);
     }
 

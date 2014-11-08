@@ -27,8 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eitan.petsi.com.eitan.petsi.services.AuthResponse;
-import com.eitan.petsi.com.eitan.petsi.services.LoginResponse;
-import com.eitan.petsi.com.eitan.petsi.services.RegisterResponse;
+import com.eitan.petsi.com.eitan.petsi.services.PostActionResponse;
 import com.eitan.petsi.com.eitan.petsi.services.UserLoginTask;
 import com.eitan.petsi.com.eitan.petsi.services.UserLoginRespond;
 import com.eitan.petsi.com.eitan.petsi.services.UserRegisterTask;
@@ -348,7 +347,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     }
 
     @Override
-    public void onRegisterSuccess(RegisterResponse registerResponse) {
+    public void onRegisterSuccess(PostActionResponse PostActionResponse) {
         onRegisterTryEnd();
 
         //Update current user

@@ -14,7 +14,6 @@ public class PetListProvider {
 
     public void setPetList(ArrayList<Pet> petList)
     {
-        System.out.println("############ Refresh pets #############");
         mPetMap = new HashMap<String, Pet>();
 
         for (Pet pet : petList)

@@ -7,7 +7,7 @@ import retrofit.client.Response;
 /**
  * Created by eitan on 24/10/2014.
  */
-public class UserRegisterTask implements Callback<RegisterResponse>{
+public class UserRegisterTask implements Callback<PostActionResponse>{
 
     private UserRegisterRespond userRegisterRespond;
     private String userName;
@@ -27,10 +27,10 @@ public class UserRegisterTask implements Callback<RegisterResponse>{
 
 
     @Override
-    public void success(RegisterResponse registerResponse, Response response) {
+    public void success(PostActionResponse PostActionResponse, Response response) {
 
-        if (registerResponse.isSuccess()){
-            userRegisterRespond.onRegisterSuccess(registerResponse);
+        if (PostActionResponse.isSuccess()){
+            userRegisterRespond.onRegisterSuccess(PostActionResponse);
         }else{
             userRegisterRespond.onRegisterFailed();
         }

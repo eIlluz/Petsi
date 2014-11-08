@@ -12,12 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
-import com.eitan.petsi.aws.FileDownloadCallBack;
 import com.eitan.petsi.com.eitan.petsi.services.*;
 import com.eitan.petsi.com.eitan.petsi.services.UserDetails;
 import com.eitan.petsi.views.FavImage;
 import com.squareup.picasso.Picasso;
-import java.io.File;
 
 import retrofit.RetrofitError;
 
@@ -50,6 +48,7 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
     private TextView ownerName;
     private TextView ownerAddress;
+    private TextView ownerMail;
     private TextView ownerPhone;
 
     private FavImage favButton;
@@ -96,6 +95,7 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
         ownerAddress = (TextView) rootView.findViewById(R.id.det_owner_address);
         ownerName = (TextView) rootView.findViewById(R.id.det_owner_name);
+        ownerMail = (TextView) rootView.findViewById(R.id.det_owner_mail);
         ownerPhone = (TextView) rootView.findViewById(R.id.det_owner_phone);
 
         likesTex = (TextView)rootView.findViewById(R.id.det_likes_txt);
@@ -169,13 +169,14 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onGetDetailsSuccess(UserDetails userDetails) {
-        pet.setOwnerDetails(new OwnerDetails(userDetails.getName(),userDetails.getPhoneNumber(),userDetails.getAddress(),userDetails.getMailAddress()));
+        pet.setOwnerDetails(new OwnerDetails(userDetails.getName(),userDetails.getPhoneNum(),userDetails.getAddress(),userDetails.getMailAddress()));
 
         System.out.println("@@@@@@@@@@@@ Owner data came back @@@@@@@@@@@@@@@@@");
         System.out.println("name: " + pet.getOwnerDetails().getName());
         ownerName.setText(pet.getOwnerDetails().getName());
         ownerAddress.setText(pet.getOwnerDetails().getAddress());
-        ownerPhone.setText((pet.getOwnerDetails().getTel()));
+        ownerMail.setText(pet.getOwnerDetails().getEmail());
+        ownerPhone.setText(pet.getOwnerDetails().getTel());
     }
 
     @Override

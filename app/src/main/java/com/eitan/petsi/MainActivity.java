@@ -16,7 +16,9 @@ import android.widget.Toast;
 import com.eitan.petsi.data.PetItemListActivity;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SearchFragment.OnFragmentSearchInteractionListener
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        SearchFragment.OnFragmentSearchInteractionListener,
+        UserDetailsFragment.OnUserDetailsFragmentListener
          {
 
     /**
@@ -65,19 +67,19 @@ public class MainActivity extends Activity
                     .commit();
         }
     }
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
+//    public void onSectionAttached(int number) {
+//        switch (number) {
+//            case 1:
+//                mTitle = getString(R.string.title_section1);
+//                break;
+//            case 2:
+//                mTitle = getString(R.string.title_section2);
+//                break;
+//            case 3:
+//                mTitle = getString(R.string.title_section3);
+//                break;
+//        }
+//    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
@@ -165,13 +167,30 @@ public class MainActivity extends Activity
     private Fragment getCurrentFragment(int sectionNumber)
     {
 
-        SearchFragment fragment = new SearchFragment();
 
-        return fragment;
+        switch (sectionNumber){
+
+            case 1:
+                UserDetailsFragment udFragment = new UserDetailsFragment();
+                return udFragment;
+
+            case 2:
+                SearchFragment sFragment = new SearchFragment();
+                return sFragment;
+        }
+
+        SearchFragment defaultFragment = new SearchFragment();
+        return defaultFragment;
+
     }
 
     @Override
     public void onFragmentSearchInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onSave() {
 
     }
 }
