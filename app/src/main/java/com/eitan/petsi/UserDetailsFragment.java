@@ -30,6 +30,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     private EditText addressEditText;
     private EditText phoneEditText;
 
+    private String birthDate;
+
     private App app;
 
     private FButton saveButton;
@@ -70,7 +72,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
                                                            firstNameEditText.getText().toString(),
                                                            lastNameEditText.getText().toString(),
                                                            phoneEditText.getText().toString(),
-                                                           addressEditText.getText().toString());
+                                                           addressEditText.getText().toString(),
+                                                           birthDate);
 
         updateUserTask.updateUser();
 
@@ -124,6 +127,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         lastNameEditText.setText(userDetails.getLastName());
         phoneEditText.setText(userDetails.getPhoneNum());
         addressEditText.setText(userDetails.getAddress());
+
+        birthDate = userDetails.getBirthDate();
     }
 
     @Override

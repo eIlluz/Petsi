@@ -9,12 +9,21 @@ public class OwnerDetails {
     private String tel;
     private String address;
     private String email;
+    private String birthDate;
 
     public OwnerDetails(String name, String tel, String address, String email) {
         this.name = name;
         this.tel = tel;
         this.address = address;
         this.email = email;
+    }
+
+    public OwnerDetails(String name, String tel, String address, String email, String birthDate) {
+        this.name = name;
+        this.tel = tel;
+        this.address = address;
+        this.email = email;
+        this.birthDate = birthDate;
     }
 
     public String getTel() {
@@ -47,5 +56,13 @@ public class OwnerDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

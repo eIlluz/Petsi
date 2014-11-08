@@ -1,8 +1,12 @@
 package com.eitan.petsi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -17,17 +21,21 @@ import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
 import com.eitan.petsi.aws.FileUploadCallBack;
+import com.eitan.petsi.com.eitan.petsi.services.AddAdListener;
+import com.eitan.petsi.com.eitan.petsi.services.AddAdTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import info.hoang8f.widget.FButton;
+import retrofit.RetrofitError;
 
 
-public class NewAd extends Activity implements View.OnClickListener, FileUploadCallBack{
+public class NewAd extends Activity implements View.OnClickListener, FileUploadCallBack, AddAdListener{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -41,9 +49,13 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
     private EditText petAgeEditText;
     private EditText petDescEditText;
     private EditText petStoryEditText;
+
     private Spinner sizeSpinner;
     private Spinner typeSpinner;
     private Spinner genderSpinner;
+
+    private View progressView;
+    private View newAdFormView;
 
     private App app;
 
@@ -55,6 +67,9 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
         app = (App)getApplication();
 
         setContentView(R.layout.activity_new_ad);
+
+        progressView = findViewById(R.id.new_ad_progress);
+        newAdFormView = findViewById(R.id.new_ad_form);
 
         petPicture = (ImageView)findViewById(R.id.picture);
         petPicture.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -74,6 +89,38 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
 
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            newAdFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            newAdFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    newAdFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            newAdFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
     //Set the animal types values set.
     private void setAnimalAdapter()
     {
@@ -210,7 +257,8 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
 
 
     private void handleError(String errorMessage){
-
+        showProgress(false);
+        Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -224,12 +272,51 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
 
     private void saveNewAd(){
 
-        app.uploadImageToS3("i_am_working.jpg",pictureFile,this);
+        showProgress(true);
+        System.out.println("%%%%%%%%%%%%%%%%%%% Uploading...");
+        // First try to upload image to s3
+        app.uploadImageToS3(calcPicFileName(),pictureFile,this);
+    }
+
+    private String calcPicFileName(){
+
+        java.util.Date date= new java.util.Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+
+        String currTimestamp =  new SimpleDateFormat("MMddyyyyHHmmss").format(timestamp);
+
+        return (app.getCurrentUser() + currTimestamp + ".jpg");
+    }
+    @Override
+    public void onUploadToS3Completed(UploadResult uploadResult) {
+
+        System.out.println("%%%%%%%%%%%%%%%%%%% Uploaded! Adding...");
+
+        //After image uploaded, saving the ad
+        AddAdTask addAdTask = new AddAdTask(this,petDescEditText.getText().toString(),
+                sizeSpinner.getSelectedItem().toString().toUpperCase(),typeSpinner.getSelectedItem().toString().toUpperCase(),
+                app.getCurrentUser(),petNameEditText.getText().toString(),petStoryEditText.getText().toString(),
+                app.getPicUrl(uploadResult),genderSpinner.getSelectedItem().toString().toUpperCase(),petAgeEditText.getText().toString());
+
+        addAdTask.addAd();
     }
 
     @Override
-    public void onUploadToS3Completed(UploadResult uploadResult) {
-        Toast.makeText(this,uploadResult.getKey(),Toast.LENGTH_LONG).show();
+    public void onAddSuccess() {
+
+        showProgress(false);
+        Toast.makeText(this,getString(R.string.add_success_msg),Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onAddFailed() {
+        showProgress(false);
+        Toast.makeText(this,getString(R.string.add_ad_error),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRestCallError(RetrofitError error) {
+        showProgress(false);
+        Toast.makeText(this,getString(R.string.add_ad_error),Toast.LENGTH_LONG).show();
+    }
 }

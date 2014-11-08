@@ -7,4 +7,6 @@
     <string name="story">Pet story</string>
     <string name="contact">Contact info</string>
 
+    <string name="delete_error">Error occurred while deleting ad</string>
+    <string name="delete_success">Ad deleted successfully</string>
 </resources>

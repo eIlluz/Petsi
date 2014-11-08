@@ -328,7 +328,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     }
 
     @Override
-    public void onLoginSuccess(AuthResponse AuthResponse) {
+    public void onLoginSuccess() {
         onLoginTryEnd();
 
         //Update current user
@@ -347,7 +347,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>, 
     }
 
     @Override
-    public void onRegisterSuccess(PostActionResponse PostActionResponse) {
+    public void onRegisterSuccess() {
         onRegisterTryEnd();
 
         //Update current user

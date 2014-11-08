@@ -3,6 +3,7 @@ package com.eitan.petsi;
 import android.app.Application;
 import android.content.Context;
 
+import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
 import com.eitan.petsi.aws.FileDownloadCallBack;
 import com.eitan.petsi.aws.FileUploadCallBack;
 import com.eitan.petsi.aws.S3Provider;
@@ -53,6 +54,10 @@ public class App extends Application {
 
     public void uploadImageToS3(String fileName,File file, FileUploadCallBack fileUploadCallBack){
         s3Provider.uploadImage(fileName,file,fileUploadCallBack);
+    }
+
+    public String getPicUrl(UploadResult uploadResult){
+        return s3Provider.getPicUrl(uploadResult);
     }
 
     public String getCurrentUser() {

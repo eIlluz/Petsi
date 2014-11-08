@@ -70,7 +70,7 @@ public class GetAdsTask implements Callback<List<AdResponseItem>> {
         if (adResponseList != null && adResponseList != null) {
             for (AdResponseItem item : adResponseList) {
 
-                petsList.add(new Pet(new AdData(Integer.toString(item.getId()), item.getUser(), item.getCreatedOn(), item.getCreatedOn(), "open", 7),
+                petsList.add(new Pet(new AdData(Integer.toString(item.getId()), item.getUser(), item.getCreatedOn(), item.getCreatedOn(), item.getStatus(), 0),
                         new OwnerDetails("", "", "", item.getUser()),
                         new PetDetails(item.getPetName(), item.getGender(), (int) item.getAge(), item.getType(), item.getDescription(), item.getStory(),
                                 item.getPhotoURL(), item.getSize())));

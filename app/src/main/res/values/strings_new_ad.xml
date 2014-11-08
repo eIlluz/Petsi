@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="add_ad_error">Error occurred trying to save ad</string>
+    <string name="add_success_msg">Ad created successfully</string>
+
     <string name="new_ad_pet_name_hint">Name</string>
     <string name="new_ad_pet_size_hint">Size</string>
     <string name="new_ad_pet_age_hint">Age</string>

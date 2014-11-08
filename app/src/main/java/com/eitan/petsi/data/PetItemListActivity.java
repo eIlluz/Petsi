@@ -98,10 +98,6 @@ public class PetItemListActivity extends Activity
         GetAdsTask getAdsTask = new GetAdsTask(this,filterData.fromAge,filterData.toAge,filterData.animal,filterData.gender,filterData.size,filterData.user);
         getAdsTask.getAds();
 
-//        GetPetsTask taskPetList = new GetPetsTask(filterData.age, filterData.gender, filterData.size, filterData.animal);
-//        taskPetList.execute((Void) null);
-
-        //petListFrag.setFilters(extras.getString(App.AGE),extras.getString(App.ANIMAL),extras.getString(App.SIZE),extras.getString(App.GENDER));
     }
 
     /**
@@ -152,7 +148,17 @@ public class PetItemListActivity extends Activity
 
     @Override
     public void onAdsLoaded(List<Pet> ads) {
-        mPetList = (ArrayList<Pet>)ads;
+
+        ArrayList<Pet> pets = (ArrayList<Pet>)ads;
+
+        mPetList = new ArrayList<Pet>();
+
+        for (Pet pet:pets){
+            System.out.println(pet.getAdData().getAdStatus());
+            if (pet.getAdData().getAdStatus().equals("OPEN"))
+                mPetList.add(pet);
+        }
+
         App app = (App)getApplication();
         app.petListProvider.setPetList(mPetList);
         mPetListFrag.showList();

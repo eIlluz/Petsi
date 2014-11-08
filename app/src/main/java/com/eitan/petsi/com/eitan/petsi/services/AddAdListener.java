@@ -5,11 +5,11 @@ import retrofit.RetrofitError;
 /**
  * Created by eitan on 24/10/2014.
  */
-public interface UserLoginRespond {
+public interface AddAdListener {
 
-    public void onLoginSuccess();
+    public void onAddSuccess();
 
-    public void onLoginFailed();
+    public void onAddFailed();
 
     public void onRestCallError(RetrofitError error);
 }

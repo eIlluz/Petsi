@@ -13,24 +13,37 @@ import retrofit.http.QueryMap;
  */
 public interface PetApi {
 
-    //Insert new user
-    @GET("/InsertUser")
-    void insertUser(@Query("id") String id ,@Query("pass") String pass, Callback<PostActionResponse> callback);
 
+    @GET("/addUser")
+    void addUser(@Query("id") String id,@Query("pass") String pass, @Query("name") String name , Callback<PostActionResponse> callback);
 
     //Query ads
     @GET("/getAd")
     void getAd(@QueryMap Map<String, String> params,
                Callback<List<AdResponseItem>> callback);
 
-    //Authenticate user
-    @GET("/authUser")
-    void authUser(@Query("id") String id ,@Query("pass") String pass, Callback<AuthResponse> callback);
-
     //Get user details
-    @GET("/getUserDetails")
-    void getUserDetails(@Query("id") String id, Callback<UserDetails> callback);
+    @GET("/getUser")
+    void getUser(@QueryMap Map<String, String> params, Callback<UserDetails> callback);
 
     @GET("/updateUser")
-    void updateUser(@QueryMap Map<String, String> params,Callback<PostActionResponse> insertRespond);
+    void updateUser(@QueryMap Map<String, String> params,Callback<PostActionResponse> callback);
+
+    @GET("/addAd")
+    void addAd(@Query("desc") String desc,
+               @Query("size") String size,
+               @Query("type") String type,
+               @Query("user") String user,
+               @Query("petName") String petName,
+               @Query("story") String story,
+               @Query("photoURL") String photoURL,
+               @Query("gender") String gender,
+               @Query("age") String age,
+               Callback<PostActionResponse> callback);
+
+    @GET("/deleteAd")
+    void deleteAd(@Query("adID") String adID, Callback<PostActionResponse> callback);
+
+    @GET("/getLikes")
+    void getLikes(@QueryMap Map<String, String> params,Callback<List<FavRespond>> callback);
 }

@@ -9,13 +9,16 @@ public class UserDetails {
     private String mailAddress;
     private String address;
     private String phoneNum;
+    private String birthDate;
 
-    public UserDetails(String name, String lastName, String mailAddress, String address, String phoneNum) {
+    public UserDetails(String name, String lastName, String mailAddress, String address, String phoneNum,String birthDate) {
         this.name = name;
         this.lastName = lastName;
         this.mailAddress = mailAddress;
         this.address = address;
         this.phoneNum = phoneNum;
+        this.birthDate = birthDate;
+
     }
 
     public String getName() {
@@ -56,5 +59,13 @@ public class UserDetails {
 
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

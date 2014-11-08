@@ -28,7 +28,7 @@ public class AdResponseItem {
         this.story = story;
         this.photoURL = photoURL;
         this.size = size;
-        NumOfLikes = numOfLikes;
+        this.NumOfLikes = numOfLikes;
         this.type = type;
         this.user = user;
         this.petName = petName;

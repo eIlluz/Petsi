@@ -1,10 +1,14 @@
 package com.eitan.petsi.data;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +21,8 @@ import com.eitan.petsi.com.eitan.petsi.services.UserDetails;
 import com.eitan.petsi.views.FavImage;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import retrofit.RetrofitError;
 
 /**
@@ -25,7 +31,8 @@ import retrofit.RetrofitError;
  * in two-pane mode (on tablets) or a {@link PetItemDetailActivity}
  * on handsets.
  */
-public class PetItemDetailFragment extends Fragment implements View.OnClickListener, UserDetailsRespond {
+public class PetItemDetailFragment extends Fragment implements View.OnClickListener, UserDetailsRespond,
+                                                               DeleteAdListener, GetLikesListener {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -77,6 +84,8 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
+
         View rootView = inflater.inflate(R.layout.fragment_petitem_detail, container, false);
 
         callImageButton = (ImageView)rootView.findViewById(R.id.det_call_btn);
@@ -104,6 +113,13 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
         // Show the dummy content as text in a TextView.
         if (pet != null) {
 
+            App app = (App)getActivity().getApplication();
+
+            if (pet.getOwnerDetails().getEmail().equals(app.getCurrentUser()))
+                setHasOptionsMenu(true);
+            else {
+                setHasOptionsMenu(false);
+            }
             //petDesc.setText(pet.getPetDetails().getStory());
 
             getActivity().getActionBar().setTitle(pet.getPetDetails().getName());
@@ -119,20 +135,31 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
             likesTex.setText(String.valueOf(pet.getAdData().getNumOfLikes()));
 
-            App app = (App)getActivity().getApplication();
-//            app.getFileForS3Key(pet.getPetDetails().getPhotoUrl(),this);
+
             Picasso.with(getActivity().getApplicationContext()).load(pet.getPetDetails().getPhotoUrl())
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)
                     .centerCrop().fit()
+                    .rotate(180)
                     .into(petImage);
 
             //Get owners data
             GetUserDetailsTask getUserDetailsTask = new GetUserDetailsTask(pet.getOwnerDetails().getEmail(),this);
             getUserDetailsTask.getUserDetails();
+
+            //Get number of likes
+            GetLikesTask getLikesTask = new GetLikesTask(this);
+            getLikesTask.setAdId(pet.getAdData().getAdID());
+            getLikesTask.getLikes();
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.pet_details, menu);
     }
 
     @Override
@@ -183,8 +210,38 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     public void onGetDetailsFail() {}
 
     @Override
+    public void onDeleteSuccess() {
+        Toast.makeText(getActivity(),getString(R.string.delete_success),Toast.LENGTH_LONG).show();
+        getActivity().finish();
+    }
+
+    @Override
+    public void onDeleteFailed() {
+        Toast.makeText(getActivity(),getString(R.string.delete_error),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGetLikesSuccess(List<FavRespond> likes) {
+
+        if (likes != null)
+            likesTex.setText(Integer.toString(likes.size()));
+    }
+
+    @Override
     public void onRestCallError(RetrofitError error) {
         Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_LONG);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+
+                DeleteAdTask deleteAdTask = new DeleteAdTask(this,pet.getAdData().getAdID());
+                deleteAdTask.deleteAd();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+            }
+    }
 }

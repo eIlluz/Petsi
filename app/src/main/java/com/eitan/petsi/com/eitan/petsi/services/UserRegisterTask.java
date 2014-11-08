@@ -22,7 +22,7 @@ public class UserRegisterTask implements Callback<PostActionResponse>{
     }
 
     public void registerUser(){
-        PetsiRestClient.get().insertUser(userName,password,this);
+        PetsiRestClient.get().addUser(userName,password,name,this);
     }
 
 
@@ -30,7 +30,7 @@ public class UserRegisterTask implements Callback<PostActionResponse>{
     public void success(PostActionResponse PostActionResponse, Response response) {
 
         if (PostActionResponse.isSuccess()){
-            userRegisterRespond.onRegisterSuccess(PostActionResponse);
+            userRegisterRespond.onRegisterSuccess();
         }else{
             userRegisterRespond.onRegisterFailed();
         }

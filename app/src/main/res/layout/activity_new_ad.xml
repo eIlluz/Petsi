@@ -7,110 +7,127 @@
                     android:paddingRight="0dp"
                     android:paddingTop="0dp"
                     android:orientation="vertical"
-                    android:weightSum="2">
+                    android:weightSum="2"
+                    >
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/new_ad_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
 
     <LinearLayout
-        android:id="@+id/det_cont_image"
+        android:id="@+id/new_ad_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="1">
-        <ImageView
-            android:id="@+id/picture"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_action_take_picture"
-            android:scaleType="center"/>
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_gravity="top"
-        android:paddingLeft="10dp">
+        android:weightSum="2">
 
         <LinearLayout
-            android:id="@+id/det_cont_gen_data"
+            android:id="@+id/det_cont_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            >
-
-                <!--<TextView-->
-                    <!--android:id="@+id/new_add_petName"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:text="My name"-->
-                    <!--android:layout_gravity="top"-->
-                    <!--android:textSize="25sp"-->
-                    <!--android:gravity="top" />-->
-            <EditText
-                android:id="@+id/new_ad_pet_name"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/picture"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/new_ad_pet_name_hint"
-                android:layout_marginTop="10dp"/>
-
-            <Spinner
-                android:id="@+id/new_ad_animal_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
-
-            <EditText
-                android:id="@+id/new_ad_pet_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/new_ad_pet_desc_hint"
-                android:layout_marginTop="10dp"/>
-
-            <EditText
-                android:id="@+id/new_ad_pet_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/new_ad_pet_age_hint"
-                android:inputType="number"
-                android:layout_marginTop="10dp"/>
-
-            <Spinner
-                android:id="@+id/new_ad_size_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
-
-            <Spinner
-                android:id="@+id/new_ad_gender_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/new_ad_pet_story"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/new_ad_pet_story_hint"
-                android:layout_marginTop="10dp"/>
-
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_action_take_picture"
+                android:scaleType="center"/>
         </LinearLayout>
-    </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
 
-        <info.hoang8f.widget.FButton
-            fbutton:buttonColor="@color/purple"
-            fbutton:shadowColor="@color/fbutton_color_asbestos"
-            fbutton:shadowEnabled="true"
-            fbutton:shadowHeight="2dp"
-            fbutton:cornerRadius="1dp"
-            android:id="@+id/save_new_ad"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/save_ad"
-            android:textStyle="bold"
-            android:textColor="@color/common_signin_btn_dark_text_default"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_weight="1"
+            android:layout_gravity="top"
+            android:paddingLeft="10dp">
 
+            <LinearLayout
+                android:id="@+id/det_cont_gen_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/new_add_petName"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:text="My name"-->
+                        <!--android:layout_gravity="top"-->
+                        <!--android:textSize="25sp"-->
+                        <!--android:gravity="top" />-->
+                <EditText
+                    android:id="@+id/new_ad_pet_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/new_ad_pet_name_hint"
+                    android:layout_marginTop="10dp"/>
+
+                <Spinner
+                    android:id="@+id/new_ad_animal_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"/>
+
+                <EditText
+                    android:id="@+id/new_ad_pet_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/new_ad_pet_desc_hint"
+                    android:layout_marginTop="10dp"/>
+
+                <EditText
+                    android:id="@+id/new_ad_pet_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/new_ad_pet_age_hint"
+                    android:inputType="number"
+                    android:layout_marginTop="10dp"/>
+
+                <Spinner
+                    android:id="@+id/new_ad_size_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"/>
+
+                <Spinner
+                    android:id="@+id/new_ad_gender_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/new_ad_pet_story"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/new_ad_pet_story_hint"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <info.hoang8f.widget.FButton
+                fbutton:buttonColor="@color/purple"
+                fbutton:shadowColor="@color/fbutton_color_asbestos"
+                fbutton:shadowEnabled="true"
+                fbutton:shadowHeight="2dp"
+                fbutton:cornerRadius="1dp"
+                android:id="@+id/save_new_ad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/save_ad"
+                android:textStyle="bold"
+                android:textColor="@color/common_signin_btn_dark_text_default"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

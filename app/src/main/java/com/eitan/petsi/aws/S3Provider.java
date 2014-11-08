@@ -40,6 +40,11 @@ public class S3Provider {
         transferManager  = new TransferManager(awsCredentials);
     }
 
+    public String getPicUrl(UploadResult uploadResult){
+
+        return ("http://" + uploadResult.getBucketName() + ".s3.amazonaws.com/" + uploadResult.getKey());
+    }
+
     public void uploadImage(String fileName,File file, FileUploadCallBack fileUploadCallBack){
 
         String fileKey = IMAGES_PREFIX + fileName;
@@ -134,17 +139,7 @@ public class S3Provider {
         @Override
         protected File doInBackground(FileParams... fileParamses) {
 
-//            System.out.println("#@#@#@#@#@#@#" + context.getFilesDir().getAbsolutePath() + "#@#@#@#@#@#@#");
             File file = new File(context.getFilesDir(), fileParamses[0].filename);
-
-//            File cachFile;
-//
-//            try {
-//                cachFile = File.createTempFile(fileParamses[0].filename,null,context.getCacheDir());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                return null;
-//            }
 
                     System.out.println("path = " + fileParamses[0].path);
             System.out.println("bucket = " + fileParamses[0].bucketName);
