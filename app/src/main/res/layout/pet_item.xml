@@ -57,5 +57,6 @@
         android:layout_toRightOf="@+id/petDetails"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:clickable="false"/>
 </RelativeLayout>

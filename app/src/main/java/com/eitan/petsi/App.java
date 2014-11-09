@@ -7,7 +7,10 @@ import com.amazonaws.mobileconnectors.s3.transfermanager.model.UploadResult;
 import com.eitan.petsi.aws.FileDownloadCallBack;
 import com.eitan.petsi.aws.FileUploadCallBack;
 import com.eitan.petsi.aws.S3Provider;
+import com.eitan.petsi.com.eitan.petsi.services.AdResponseItem;
 import com.eitan.petsi.com.eitan.petsi.services.FavRespond;
+import com.eitan.petsi.com.eitan.petsi.services.GetAdsUserLikesListener;
+import com.eitan.petsi.com.eitan.petsi.services.GetAdsUserLikesTask;
 import com.eitan.petsi.com.eitan.petsi.services.GetLikesListener;
 import com.eitan.petsi.com.eitan.petsi.services.GetLikesTask;
 import com.eitan.petsi.data.PetListProvider;
@@ -21,7 +24,7 @@ import retrofit.RetrofitError;
 /**
  * Created by eitan on 26/07/2014.
  */
-public class App extends Application implements GetLikesListener{
+public class App extends Application implements GetAdsUserLikesListener{
 
     public static final String AGE = "Age";
     public static final String SIZE = "Size";
@@ -30,6 +33,7 @@ public class App extends Application implements GetLikesListener{
     public static final String FROM_AGE = "FromAge";
     public static final String TO_AGE = "ToAge";
     public static final String USER = "user";
+    public static final String FAV = "fav";
 
     public static final String LOGIN_PARAM = "login_param";
     public static final int LOGIN = 1;
@@ -43,7 +47,7 @@ public class App extends Application implements GetLikesListener{
 
     private String currentUser;
 
-    private List<FavRespond> userFavs = new ArrayList<FavRespond>();
+    private List<AdResponseItem> userFavs = new ArrayList<AdResponseItem>();
 
     @Override
     public void onCreate() {
@@ -76,20 +80,23 @@ public class App extends Application implements GetLikesListener{
     public void setCurrentUser(String currentUser) {
 
         this.currentUser = currentUser;
-
-        GetLikesTask getLikesTask = new GetLikesTask(this);
-        getLikesTask.setUser(currentUser);
-        getLikesTask.getLikes();
+        refreshUserLikes();
     }
 
-    public List<FavRespond> getUserFavs() {
+    public void refreshUserLikes(){
+
+        GetAdsUserLikesTask getAdsUserLikesTask = new GetAdsUserLikesTask(this,currentUser);
+        getAdsUserLikesTask.getLikes();
+    }
+
+    public List<AdResponseItem> getUserFavs() {
         return userFavs;
     }
 
     public boolean isOnFavList(String id){
 
-        for (FavRespond favRespond: userFavs){
-            if (favRespond.getAdID().equals(id))
+        for (AdResponseItem adResponseItem: userFavs){
+            if (Integer.toString(adResponseItem.getId()).equals(id))
                 return true;
         }
 
@@ -97,7 +104,7 @@ public class App extends Application implements GetLikesListener{
     }
 
     @Override
-    public void onGetLikesSuccess(List<FavRespond> likes) {
+    public void onGetAdsUserLikesSuccess(List<AdResponseItem> likes) {
         userFavs = likes;
     }
 

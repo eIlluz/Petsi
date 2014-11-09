@@ -73,7 +73,6 @@ public class petListAdapter extends ArrayAdapter<Pet>
                 .resizeDimen(R.dimen.pet_item_width,R.dimen.pet_item_height)
                .placeholder(R.drawable.ic_dog)
                .error(R.drawable.ic_launcher)
-                .rotate(180)
                .into(holder.petImage);
 
         return convertView;

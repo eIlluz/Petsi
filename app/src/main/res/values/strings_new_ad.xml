@@ -12,6 +12,9 @@
     <string name="new_ad_pet_story_hint">Pet story</string>
     <string name="new_ad_pet_gender_hint">Gender</string>
 
+    <string name="empty_field_message">Field cannot be empty</string>
+    <string name="empty_pic">Pet must have picture</string>
+
     <string-array name="new_ad_types_array">
         <item>Dog</item>
         <item>Cat</item>

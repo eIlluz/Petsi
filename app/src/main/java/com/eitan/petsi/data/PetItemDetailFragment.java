@@ -33,7 +33,7 @@ import retrofit.RetrofitError;
  */
 public class PetItemDetailFragment extends Fragment implements View.OnClickListener, UserDetailsRespond,
                                                                DeleteAdListener, GetLikesListener,
-                                                               AdLikeListener{
+                                                               AdLikeListener,DeleteLikeListener{
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -143,7 +143,6 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)
                     .centerCrop().fit()
-                    .rotate(180)
                     .into(petImage);
 
             //Get owners data
@@ -151,8 +150,7 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
             getUserDetailsTask.getUserDetails();
 
             //Get number of likes
-            GetLikesTask getLikesTask = new GetLikesTask(this);
-            getLikesTask.setAdId(pet.getAdData().getAdID());
+            GetLikesTask getLikesTask = new GetLikesTask(this,pet.getAdData().getAdID());
             getLikesTask.getLikes();
         }
 
@@ -178,6 +176,7 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
             case (R.id.det_fav_btn):
                 if (favButton.getOnState())
                     adLike();
+                else deleteLike();
                 break;
         }
     }
@@ -185,6 +184,11 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
     private void adLike(){
         AdLikeTask adLikeTask = new AdLikeTask(this,app.getCurrentUser(),pet.getAdData().getAdID());
         adLikeTask.adLike();
+    }
+
+    private void deleteLike(){
+        DeleteLikeTask deleteLikeTask = new DeleteLikeTask(this,app.getCurrentUser(),pet.getAdData().getAdID());
+        deleteLikeTask.deleteLike();
     }
 
     private void sendMail(){
@@ -250,6 +254,16 @@ public class PetItemDetailFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onAdLikeFailed() {
+
+    }
+
+    @Override
+    public void onDeleteLikeSuccess() {
+        likesTex.setText(Integer.toString(Integer.parseInt(likesTex.getText().toString()) - 1));
+    }
+
+    @Override
+    public void onDeleteLikeFailed() {
 
     }
 

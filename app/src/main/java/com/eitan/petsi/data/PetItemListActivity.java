@@ -6,8 +6,12 @@ import android.app.Activity;
 import android.widget.Toast;
 import com.eitan.petsi.App;
 import com.eitan.petsi.R;
+import com.eitan.petsi.com.eitan.petsi.services.AdResponseItem;
 import com.eitan.petsi.com.eitan.petsi.services.GetAdsRespond;
 import com.eitan.petsi.com.eitan.petsi.services.GetAdsTask;
+import com.eitan.petsi.com.eitan.petsi.services.GetAdsUserLikesListener;
+import com.eitan.petsi.com.eitan.petsi.services.GetAdsUserLikesTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit.RetrofitError;
@@ -29,7 +33,7 @@ import retrofit.RetrofitError;
  * to listen for item selections.
  */
 public class PetItemListActivity extends Activity
-        implements PetItemListFragment.Callbacks, GetAdsRespond {
+        implements PetItemListFragment.Callbacks, GetAdsRespond, GetAdsUserLikesListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -42,10 +46,14 @@ public class PetItemListActivity extends Activity
 
     private FilterData filterData;
 
+    App app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_petitem_list);
+
+        app = (App)getApplication();
 
         mPetListFrag = ((PetItemListFragment) getFragmentManager()
                 .findFragmentById(R.id.petitem_list));
@@ -77,7 +85,8 @@ public class PetItemListActivity extends Activity
                                                 extras.getString(App.SIZE),
                                                 extras.getInt(App.FROM_AGE),
                                                 extras.getInt(App.TO_AGE),
-                                                extras.getString(App.USER));
+                                                extras.getString(App.USER),
+                                                extras.getBoolean(App.FAV));
                 }else{
                     filterData = new FilterData();
                 }
@@ -90,13 +99,19 @@ public class PetItemListActivity extends Activity
                                             savedInstanceState.getString(App.SIZE),
                                             savedInstanceState.getInt(App.FROM_AGE),
                                             savedInstanceState.getInt(App.TO_AGE),
-                                            savedInstanceState.getString(App.USER));
+                                            savedInstanceState.getString(App.USER),
+                                            savedInstanceState.getBoolean(App.FAV));
 
             }
         }
 
-        GetAdsTask getAdsTask = new GetAdsTask(this,filterData.fromAge,filterData.toAge,filterData.animal,filterData.gender,filterData.size,filterData.user);
-        getAdsTask.getAds();
+        if (!filterData.fav) {
+            GetAdsTask getAdsTask = new GetAdsTask(this, filterData.fromAge, filterData.toAge, filterData.animal, filterData.gender, filterData.size, filterData.user);
+            getAdsTask.getAds();
+        }else {
+            GetAdsUserLikesTask getAdsUserLikesTask = new GetAdsUserLikesTask(this,app.getCurrentUser());
+            getAdsUserLikesTask.getLikes();
+        }
 
     }
 
@@ -142,6 +157,7 @@ public class PetItemListActivity extends Activity
         outState.putInt(App.FROM_AGE,filterData.fromAge);
         outState.putInt(App.TO_AGE,filterData.toAge);
         outState.putString(App.USER,filterData.user);
+        outState.putBoolean(App.FAV,filterData.fav);
 
         super.onSaveInstanceState(outState);
     }
@@ -165,6 +181,24 @@ public class PetItemListActivity extends Activity
     }
 
     @Override
+    public void onGetAdsUserLikesSuccess(List<AdResponseItem> likes) {
+
+        ArrayList<Pet> petsList = new ArrayList<Pet>();
+
+        if (likes != null ) {
+            for (AdResponseItem item : likes) {
+
+                petsList.add(new Pet(new AdData(Integer.toString(item.getId()), item.getUser(), item.getCreatedOn(), item.getCreatedOn(), item.getStatus(), 0),
+                        new OwnerDetails("", "", "", item.getUser()),
+                        new PetDetails(item.getPetName(), item.getGender(), (int) item.getAge(), item.getType(), item.getDescription(), item.getStory(),
+                                item.getPhotoURL(), item.getSize())));
+            }
+        }
+
+        onAdsLoaded(petsList);
+    }
+
+    @Override
     public void onRestCallError(RetrofitError error) {
 
         Toast.makeText(this.getApplicationContext(),getString(R.string.get_ads_error),Toast.LENGTH_LONG).show();
@@ -178,10 +212,12 @@ public class PetItemListActivity extends Activity
         public int toAge;
         public int fromAge;
         public String user = null;
+        public boolean fav = false;
+
 
         private FilterData(){}
 
-        private FilterData(String gender, String animal, String size, int fromAge, int toAge,String user) {
+        private FilterData(String gender, String animal, String size, int fromAge, int toAge,String user,boolean fav) {
 
             if (gender != null)
                 this.gender = gender.toUpperCase();
@@ -191,8 +227,8 @@ public class PetItemListActivity extends Activity
                 this.size = size.toUpperCase();
             this.toAge = toAge;
             this.fromAge = fromAge;
-
             this.user = user;
+            this.fav = fav;
         }
     }
 

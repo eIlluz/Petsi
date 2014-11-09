@@ -14,19 +14,11 @@ import retrofit.client.Response;
 public class GetLikesTask implements Callback<List<FavRespond>>{
 
     private GetLikesListener getLikesListener;
-    private String user;
     private String adId;
 
-    public GetLikesTask(GetLikesListener getLikesListener) {
+    public GetLikesTask(GetLikesListener getLikesListener, String adId) {
         this.getLikesListener = getLikesListener;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
+        this.adId = adId;
     }
 
     public String getAdId() {
@@ -38,14 +30,8 @@ public class GetLikesTask implements Callback<List<FavRespond>>{
     }
 
     public void getLikes(){
-        Map<String,String> fields = new HashMap<String, String>();
 
-        if (user != null && !user.isEmpty())
-            fields.put("user",user);
-        if (adId != null && !adId.isEmpty())
-            fields.put("adID",adId);
-
-        PetsiRestClient.get().getLikes(fields,this);
+            PetsiRestClient.get().getLikesForAd(adId,this);;
     }
     @Override
     public void success(List<FavRespond> favResponds, Response response) {

@@ -57,6 +57,8 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
     private View progressView;
     private View newAdFormView;
 
+    private boolean pictureTaken = false;
+
     private App app;
 
     @Override
@@ -218,20 +220,17 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Toast.makeText(getApplicationContext(),"On Result!",Toast.LENGTH_LONG).show();
-
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //petPicture.setImageBitmap(imageBitmap);
-
+            //Load the picture to view and cache.
             petPicture.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Picasso.with(getApplicationContext()).load(mCurrentPhotoPath)
                     .placeholder(R.drawable.ic_dog)
                     .error(R.drawable.ic_launcher)
                     .centerCrop().fit()
                     .into(petPicture);
+
+            pictureTaken = true;
         }
 
     }
@@ -267,13 +266,43 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
         if (view.getId() == R.id.picture)
             startCamera();
         else if (view.getId() == R.id.save_new_ad)
-            saveNewAd();
+
+            //Check data is valid
+            if (validateDetails())
+                saveNewAd();
+    }
+
+    private boolean validateDetails(){
+
+        if (petNameEditText.getText().toString().isEmpty()){
+            petNameEditText.setError(getString(R.string.empty_field_message));
+            return false;
+        }
+        if (petAgeEditText.getText().toString().isEmpty()){
+            petAgeEditText.setError(getString(R.string.empty_field_message));
+            return false;
+        }
+        if (petDescEditText.getText().toString().isEmpty()){
+            petDescEditText.setError(getString(R.string.empty_field_message));
+            return false;
+        }
+        if (petStoryEditText.getText().toString().isEmpty()){
+            petStoryEditText.setError(getString(R.string.empty_field_message));
+            return false;
+        }
+
+        if (!pictureTaken){
+            Toast.makeText(this,getString(R.string.empty_pic),Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     private void saveNewAd(){
 
+        //Show progress bar until ad saved.
         showProgress(true);
-        System.out.println("%%%%%%%%%%%%%%%%%%% Uploading...");
+
         // First try to upload image to s3
         app.uploadImageToS3(calcPicFileName(),pictureFile,this);
     }
@@ -289,8 +318,6 @@ public class NewAd extends Activity implements View.OnClickListener, FileUploadC
     }
     @Override
     public void onUploadToS3Completed(UploadResult uploadResult) {
-
-        System.out.println("%%%%%%%%%%%%%%%%%%% Uploaded! Adding...");
 
         //After image uploaded, saving the ad
         AddAdTask addAdTask = new AddAdTask(this,petDescEditText.getText().toString(),

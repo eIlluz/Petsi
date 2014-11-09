@@ -17,6 +17,7 @@ public class FavImage extends ImageButton {
 
     private Boolean onState = false;
 
+
     public FavImage(Context context) {
         super(context);
         turnOnOff(false);
@@ -61,8 +62,9 @@ public class FavImage extends ImageButton {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
-            switchState();
+        if (isClickable())
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
+                switchState();
 
         return super.onTouchEvent(event);
     }

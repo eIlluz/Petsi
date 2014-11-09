@@ -14,7 +14,7 @@ public class PetsiRestClient {
 
     private static PetApi REST_CLIENT;
     private static String ROOT =
-            "http://54.69.124.99:8080/Service/main/";
+            "http://54.69.124.99:8080/Service/";
 
     static {
         setupRestClient();

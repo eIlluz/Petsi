@@ -53,7 +53,16 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
-        if (position == 3) {
+        if (position == 2) {
+
+            //Refresh user likes before viewing them
+            app.refreshUserLikes();
+
+            Intent toMyPets = new Intent(this, PetItemListActivity.class);
+            toMyPets.putExtra(App.FAV, true);
+
+            startActivity(toMyPets);
+        }else if (position == 3) {
 
             Intent toMyPets = new Intent(this, PetItemListActivity.class);
             toMyPets.putExtra(App.USER,app.getCurrentUser());

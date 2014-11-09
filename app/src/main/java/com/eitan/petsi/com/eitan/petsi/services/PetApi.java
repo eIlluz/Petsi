@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 
@@ -14,22 +17,21 @@ import retrofit.http.QueryMap;
 public interface PetApi {
 
 
-    @GET("/addUser")
+    @PUT("/user")
     void addUser(@Query("id") String id,@Query("pass") String pass, @Query("name") String name , Callback<PostActionResponse> callback);
 
     //Query ads
-    @GET("/getAd")
+    @GET("/ad")
     void getAd(@QueryMap Map<String, String> params,
                Callback<List<AdResponseItem>> callback);
 
-    //Get user details
-    @GET("/getUser")
+    @GET("/user")
     void getUser(@QueryMap Map<String, String> params, Callback<UserDetails> callback);
 
-    @GET("/updateUser")
+    @POST("/user")
     void updateUser(@QueryMap Map<String, String> params,Callback<PostActionResponse> callback);
 
-    @GET("/addAd")
+    @PUT("/ad")
     void addAd(@Query("desc") String desc,
                @Query("size") String size,
                @Query("type") String type,
@@ -41,12 +43,19 @@ public interface PetApi {
                @Query("age") String age,
                Callback<PostActionResponse> callback);
 
-    @GET("/deleteAd")
+    @DELETE("/ad")
     void deleteAd(@Query("adID") String adID, Callback<PostActionResponse> callback);
 
-    @GET("/getLikes")
-    void getLikes(@QueryMap Map<String, String> params,Callback<List<FavRespond>> callback);
+    @GET("/like")
+    void getLikesForAd(@Query("adID") String id,Callback<List<FavRespond>> callback);
 
-    @GET("/adLike")
+    @GET("/like")
+    void getLikesForUser(@Query("user") String user,Callback<List<AdResponseItem>> callback);
+
+    @PUT("/like")
     void adLike(@Query("adID") String adID, @Query("user") String user,Callback<PostActionResponse> callback);
+
+    @DELETE("/like")
+    void deleteLike(@Query("adID") String adID, @Query("user") String user,Callback<PostActionResponse> callback);
+
 }
